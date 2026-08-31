@@ -24,7 +24,7 @@ def test_resolve_under_a_dot_directory_root(tmp_path):
     """Benchmarks download to ~/.cache/reef-eval, so a tasks root under a
     dot-directory must still resolve. Only the parts below the root decide
     whether a task is skipped."""
-    root = tmp_path / ".cache" / "reef-eval" / "tasks" / "v0.1.0" / "edgebench"
+    root = tmp_path / ".cache" / "reef-eval" / "tasks" / "v0.1.1" / "edgebench"
     (root / "real-task").mkdir(parents=True)
     (root / "real-task" / "task.toml").write_text('name = "real-task"\n')
     (root / "_template").mkdir()

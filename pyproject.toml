@@ -1,6 +1,6 @@
 [project]
 name = "reef-eval"
-version = "0.1.0"
+version = "0.1.1"
 description = "Evaluation infrastructure for self-evolving agents on the Harbor task standard: autoresearch and task streams, tamper-proof scoring, budgets on four axes, and resumable sweeps."
 readme = "README.md"
 requires-python = ">=3.12"
