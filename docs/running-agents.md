@@ -162,10 +162,10 @@ row = await lab.run(
 ```
 
 Two runnable versions:
-[`examples/minimal_harness.py`](https://github.com/Human-Agent-Society/tide-eval/blob/main/examples/minimal_harness.py)
+[`examples/minimal_harness.py`](https://github.com/Human-Agent-Society/reef-eval/blob/main/examples/minimal_harness.py)
 is a ~25-line adapter around a random-search loop, no LLM and no keys, so
 it runs anywhere Docker does.
-[`examples/llm_harness.py`](https://github.com/Human-Agent-Society/tide-eval/blob/main/examples/llm_harness.py)
+[`examples/llm_harness.py`](https://github.com/Human-Agent-Society/reef-eval/blob/main/examples/llm_harness.py)
 adds the part that makes it autoresearch: it asks a model for a candidate,
 submits it, and puts the judge's score into the next prompt. Any
 OpenAI-compatible endpoint works.
@@ -194,7 +194,7 @@ Two placements for your method, both fine:
 An evolutionary search, a solver portfolio, a bare sampling loop. The
 whole integration is: read `$JUDGE_URL`, POST candidates worth scoring,
 stop at 429. The minimal version is ~20 lines
-([`examples/random_search.py`](https://github.com/Human-Agent-Society/tide-eval/blob/main/examples/random_search.py)).
+([`examples/random_search.py`](https://github.com/Human-Agent-Society/reef-eval/blob/main/examples/random_search.py)).
 
 An OpenEvolve-style loop plugs in the same way: its `evaluate()` function
 POSTs the candidate to `$JUDGE_URL/submit` and returns the judge's score.
@@ -204,18 +204,18 @@ from the instruction) and spend submissions on survivors.
 
 ## Ready-to-run adapters
 
-[`examples/run_harness.py`](https://github.com/Human-Agent-Society/tide-eval/blob/main/examples/run_harness.py)
+[`examples/run_harness.py`](https://github.com/Human-Agent-Society/reef-eval/blob/main/examples/run_harness.py)
 runs version-pinned OpenEvolve, Codex and CORAL adapters against a task,
 for comparison against your own. They share the task's budgets and record
 their token usage like any other agent. Commands, versions and
 credentials:
-[harness README](https://github.com/Human-Agent-Society/tide-eval/blob/main/examples/harnesses/README.md).
+[harness README](https://github.com/Human-Agent-Society/reef-eval/blob/main/examples/harnesses/README.md).
 
 ## Comparing fairly
 
 - **Scores come from the task's judge.** A different scoring rule means a
   new task, built from
-  [`tasks/_template`](https://github.com/Human-Agent-Society/tide-eval/tree/main/tasks/_template).
+  [`tasks/_template`](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/_template).
 - **Compare methods at the same `budget` tag**, on the same tasks. All
   scores are judge-computed, so the curve comparison is as trustworthy as
   the endpoint comparison. `oracle` and `nop` bracket the plausible range.

@@ -1,7 +1,7 @@
 # Examples
 
 The first two run with zero setup; the rest need Docker and
-`pip install tide-eval[harbor]`.
+`pip install reef-eval[harbor]`.
 
 | Script | What it shows | Needs |
 |---|---|---|

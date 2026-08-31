@@ -1,6 +1,6 @@
 site_name: tide
 site_description: "Evaluation infrastructure for self-evolving agents: autoresearch and task streams, on the Harbor task standard."
-repo_url: https://github.com/Human-Agent-Society/tide-eval
+repo_url: https://github.com/Human-Agent-Society/reef-eval
 docs_dir: docs
 
 theme:
@@ -18,7 +18,7 @@ nav:
   - Benchmarks: tasks.md
   - Design: design.md
   - Glossary: glossary.md
-  - GitHub: https://github.com/Human-Agent-Society/tide-eval
+  - GitHub: https://github.com/Human-Agent-Society/reef-eval
 
 markdown_extensions:
   - admonition

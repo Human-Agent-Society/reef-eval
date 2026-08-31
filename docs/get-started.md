@@ -7,9 +7,9 @@ evaluating your own agent see [running agents](running-agents.md).
 ## Install
 
 ```bash
-pip install "tide-eval[harbor]"    # benchmark tasks download on first use
+pip install "reef-eval[harbor]"    # benchmark tasks download on first use
 # or from source, with every task already in tasks/:
-git clone https://github.com/Human-Agent-Society/tide-eval && cd tide-eval
+git clone https://github.com/Human-Agent-Society/reef-eval && cd reef-eval
 pip install -e ".[harbor]"
 ```
 

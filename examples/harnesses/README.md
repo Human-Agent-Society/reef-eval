@@ -18,7 +18,7 @@ All three populate Harbor's standard input, cached-input and output-token
 fields, which tide stores on the episode row as `used_n_input_tokens`,
 `used_n_cache_tokens`, and `used_n_output_tokens`.
 
-Run an adapter from the repository root (Docker and `tide-eval[harbor]` are
+Run an adapter from the repository root (Docker and `reef-eval[harbor]` are
 required):
 
 ```bash

@@ -28,11 +28,11 @@ design rules more than against style.
    solutions are handled leniently: they score 0 with a reason instead of
    raising.
 7. **Unbuilt work lives in the roadmap.** Docs state what exists; where a
-   gap must be mentioned, link the [roadmap issue](https://github.com/Human-Agent-Society/tide-eval/issues/19)
+   gap must be mentioned, link the [roadmap issue](https://github.com/Human-Agent-Society/reef-eval/issues/19)
    instead of writing "not built yet" in place.
 8. **The name is tide, lowercase.** Plain text in prose, including at the
    start of a sentence. Code font is for what you type: the `tide`
-   command, the `tide-eval` package, `from tide import Lab`.
+   command, the `reef-eval` package, `from tide import Lab`.
 
 ## What's welcome
 

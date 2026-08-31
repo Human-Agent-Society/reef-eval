@@ -3,7 +3,7 @@
 Tasks are **100% stock Harbor tasks**, validated against Harbor's
 `TaskConfig` by `tests/test_task_suite.py`; tide adds conventions around
 the format, never fields inside it. Start from
-[`tasks/_template`](https://github.com/Human-Agent-Society/tide-eval/tree/main/tasks/_template), a working
+[`tasks/_template`](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/_template), a working
 placeholder task (maximize `x` in `[0, 1]`) that passes the suite before
 you change anything. `harbor trial start -p <dir>` runs it standalone.
 
@@ -80,7 +80,7 @@ below, so the cap carries no secrecy burden.
 Same signature as `score.py`, run exactly once, on the best submission,
 when the verifier finalizes. This is where hidden tests live: held-out
 data, stricter checks, anything the session score must not leak. In
-[symbolic-regression](https://github.com/Human-Agent-Society/tide-eval/tree/main/tasks/autoresearch/first-party/symbolic-regression)
+[symbolic-regression](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/autoresearch/first-party/symbolic-regression)
 the session scores on training points and the final judge scores once on
 held-out points, so no submission budget can probe them. Without
 `final.py`, the final grade is the best session score.
@@ -220,5 +220,5 @@ dirs. It lives beside the benchmark it maintains, next to a `fetch.py`
 pinned to an upstream commit so the committed tasks can be regenerated.
 Check one real upstream spec into `tests/fixtures/` and validate the
 emitted task under Harbor's `TaskConfig`;
-[`edgebench/convert.py`](https://github.com/Human-Agent-Society/tide-eval/blob/main/tasks/autoresearch/edgebench/convert.py)
+[`edgebench/convert.py`](https://github.com/Human-Agent-Society/reef-eval/blob/main/tasks/autoresearch/edgebench/convert.py)
 is the reference.
