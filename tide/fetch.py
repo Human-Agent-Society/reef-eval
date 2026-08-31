@@ -98,7 +98,7 @@ def _git(cwd: Path, *args: str) -> str:
 # release ref; SWE-bench Verified comes from its upstream source because
 # its dataset repo has no license to redistribute under.
 
-TASKS_REPO = "https://github.com/Human-Agent-Society/tide-eval.git"
+TASKS_REPO = "https://github.com/Human-Agent-Society/reef-eval.git"
 TASKS_REF = "v0.1.0"  # bumped with each release
 
 BENCHMARKS = {

@@ -4,7 +4,7 @@ The adapter is this file; the method it runs is ``random_search.py``.
 Together they show the whole integration path: put your method in the
 container, point it at the judge, and get back a trusted score plus its
 submission log as trace rows. Requires Docker and
-``pip install tide-eval[harbor]``.
+``pip install reef-eval[harbor]``.
 
     python examples/minimal_harness.py
 """

@@ -1,5 +1,5 @@
 [project]
-name = "tide-eval"
+name = "reef-eval"
 version = "0.1.0"
 description = "Evaluation infrastructure for self-evolving agents on the Harbor task standard: autoresearch and task streams, tamper-proof scoring, budgets on four axes, and resumable sweeps."
 readme = "README.md"
@@ -21,8 +21,8 @@ dependencies = [
 tide = "tide.cli:main"
 
 [project.urls]
-Repository = "https://github.com/Human-Agent-Society/tide-eval"
-Issues = "https://github.com/Human-Agent-Society/tide-eval/issues"
+Repository = "https://github.com/Human-Agent-Society/reef-eval"
+Issues = "https://github.com/Human-Agent-Society/reef-eval/issues"
 
 [project.optional-dependencies]
 # The Harbor executor. Kept optional so the core (store, metrics, fakes)

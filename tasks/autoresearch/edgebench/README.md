@@ -48,4 +48,4 @@ conversion, however, still maps their judge onto a run-once separate
 verifier: converted tasks give the agent only the work environment's own
 feedback, and keeping the best submission in place is the agent's job.
 Regenerating the conversion onto the judge protocol is on the
-[roadmap](https://github.com/Human-Agent-Society/tide-eval/issues/19).
+[roadmap](https://github.com/Human-Agent-Society/reef-eval/issues/19).

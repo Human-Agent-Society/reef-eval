@@ -1,6 +1,6 @@
 # 🌊 tide
 
-[![CI](https://github.com/Human-Agent-Society/tide-eval/actions/workflows/ci.yml/badge.svg)](https://github.com/Human-Agent-Society/tide-eval/actions/workflows/ci.yml)
+[![CI](https://github.com/Human-Agent-Society/reef-eval/actions/workflows/ci.yml/badge.svg)](https://github.com/Human-Agent-Society/reef-eval/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
@@ -52,7 +52,7 @@ provides both a CLI and a Python API, with example code for each below.
 ### Run
 
 ```bash
-pip install "tide-eval[harbor]"    # or from a source checkout: pip install -e ".[harbor]"
+pip install "reef-eval[harbor]"    # or from a source checkout: pip install -e ".[harbor]"
 
 tide list                          # what's runnable
 tide fetch cl-bench                # download a benchmark's tasks (a source checkout has them all already)

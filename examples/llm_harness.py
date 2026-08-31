@@ -16,7 +16,7 @@ gateway, or a local server:
     export OPENAI_API_KEY=...
     python examples/llm_harness.py --model deepseek/deepseek-v4-flash
 
-Requires Docker and ``pip install tide-eval[harbor]``.
+Requires Docker and ``pip install reef-eval[harbor]``.
 """
 
 from __future__ import annotations

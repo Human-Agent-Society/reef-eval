@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes tide-eval to PyPI when a v* tag is pushed, via PyPI trusted
+# Publishes reef-eval to PyPI when a v* tag is pushed, via PyPI trusted
 # publishing (configure the publisher once on pypi.org: this repo, this
 # workflow file). The same tag is what benchmark downloads pin to.
 
