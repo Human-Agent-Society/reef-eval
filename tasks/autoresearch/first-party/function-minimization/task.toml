@@ -4,7 +4,7 @@ schema_version = "1.4"
 artifacts = []
 
 [task]
-name = "tide/function-minimization"
+name = "reef-eval/function-minimization"
 description = "Minimize a deceptive multimodal function. Continuous reward 1/(1+f); global optimum reward = 1.0."
 
 [metadata]

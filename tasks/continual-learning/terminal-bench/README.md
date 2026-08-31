@@ -14,17 +14,17 @@ All 89 tasks are committed here and run out of the box; `fetch.py`
 re-syncs them from the pin if you need to regenerate.
 
 ```bash
-tide stream terminal-bench --agent claude-code --model anthropic/claude-opus-5
+reef-eval stream terminal-bench --agent claude-code --model anthropic/claude-opus-5
 ```
 
 That streams every task in name order with the agent's state directory
-(`$TIDE_STATE_DIR`) carried between tasks. For a custom order, a subset,
+(`$REEF_EVAL_STATE_DIR`) carried between tasks. For a custom order, a subset,
 or repeats, list the task folders yourself:
 
 ```bash
-tide stream terminal-bench/chess-best-move terminal-bench/build-pmars \
+reef-eval stream terminal-bench/chess-best-move terminal-bench/build-pmars \
   terminal-bench/chess-best-move --agent claude-code --model anthropic/claude-opus-5
 ```
 
 The isolated baseline for `metrics.transfer` is a plain run over the same
-tasks: `tide run terminal-bench/<task> --agent <a>`.
+tasks: `reef-eval run terminal-bench/<task> --agent <a>`.

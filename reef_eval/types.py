@@ -1,4 +1,4 @@
-"""Core data types shared across tide.
+"""Core data types shared across reef_eval.
 
 The vocabulary is deliberately tiny:
 

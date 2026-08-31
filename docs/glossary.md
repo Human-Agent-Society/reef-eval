@@ -1,20 +1,20 @@
 # Glossary
 
-Every term tide uses, in one place. Terms link to the page that owns them.
+Every term reef-eval uses, in one place. Terms link to the page that owns them.
 
 ## Tasks and runs
 
 | Term | Meaning |
 |---|---|
 | task | A stock Harbor task directory: `task.toml`, `instruction.md`, `environment/`, `tests/`, and a reference `solution/`. |
-| episode | One run of one task under one agent; tide's unit of measurement. Equals one Harbor trial. |
+| episode | One run of one task under one agent; reef-eval's unit of measurement. Equals one Harbor trial. |
 | trial | Harbor's name for the same thing. Every episode's `uri` points at its trial directory, so results stay auditable. |
 | agent, harness | Whatever does the work inside the task container: `claude-code`, `codex`, your own `BaseAgent`, or a plain script. See [running agents](running-agents.md). |
 | oracle | Harbor's built-in agent that runs a task's reference `solution/`. Used to prove a task's pipeline end to end. |
 | autoresearch | One open-ended optimization problem with a continuous score, worked at for a whole budget, with a judge scoring every submission. One of the two regimes. See [design](design.md). |
 | session | One task's run against its judge, from the first submission to finalization. The final judge locks it, after which submissions are refused. |
 | regime | The shape of the work being measured: autoresearch (one open-ended problem) or a stream of tasks. Either regime works with any form of persisted state. See [design](design.md). |
-| self-evolving, continual learning | Something the agent learned persists past the run that produced it, as memory, skills, an evolved harness, or weights. It can show up in either regime, and tide measures its effect on the scores. |
+| self-evolving, continual learning | Something the agent learned persists past the run that produced it, as memory, skills, an evolved harness, or weights. It can show up in either regime, and reef-eval measures its effect on the scores. |
 
 ## Scoring
 
@@ -27,7 +27,7 @@ Every term tide uses, in one place. Terms link to the page that owns them.
 | reward | The trusted score of an episode, as reported by the verifier. |
 | reward hacking | Raising the score without doing the task: reading the scoring code, editing the log, or overfitting to a scorer the agent can query without limit. The judge holds all scoring code and data in its own container, the submission budget caps how often the agent can probe it, and `final.py` grades the best submission once on hidden tests. See [design](design.md#reward-hacking-scoring-runs-outside-the-agents-container). |
 | trace | Per-submission scores from the judge, stored next to the episode row; the raw material of the anytime curve. |
-| budget | What an episode may spend: time, evals, or tokens. Evals need a judge, so that axis applies to autoresearch tasks. Set on the run, delivered as `TIDE_*` env vars, recorded as `budget_*` tags with actuals in `used_*` columns. See [budgets](get-started.md#budgets). |
+| budget | What an episode may spend: time, evals, or tokens. Evals need a judge, so that axis applies to autoresearch tasks. Set on the run, delivered as `REEF_EVAL_*` env vars, recorded as `budget_*` tags with actuals in `used_*` columns. See [budgets](get-started.md#budgets). |
 
 ## Results
 
@@ -44,7 +44,7 @@ Every term tide uses, in one place. Terms link to the page that owns them.
 |---|---|
 | stream | An ordered task list run under one agent with a state directory carried between tasks. See [streams](get-started.md#streams). |
 | position | An episode's index within its stream, recorded as a tag. |
-| state directory | The carried directory, mounted into every task's container as `$TIDE_STATE_DIR`. The agent writes whatever it wants its future self to know; tide never reads it. |
+| state directory | The carried directory, mounted into every task's container as `$REEF_EVAL_STATE_DIR`. The agent writes whatever it wants its future self to know; reef-eval never reads it. |
 | snapshot | The state directory saved after each position. The next position starts from it, which makes starting states deterministic and resume clean. |
 | variant | A digest of a stream's setup (agent, tags, budget, overrides). Together with the name and the task list it decides which state and keys a stream gets, so two streams that differ in any of them stay separate. |
 

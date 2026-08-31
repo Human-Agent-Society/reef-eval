@@ -13,15 +13,15 @@ dataset repository carries no license, so these tasks are never committed
 here. This script fetches them onto your machine, and the blob filter
 keeps a `--limit` fetch small even though the full repository is huge.
 
-    tide stream swebench-verified --agent claude-code --model anthropic/claude-opus-5
+    reef-eval stream swebench-verified --agent claude-code --model anthropic/claude-opus-5
 """
 
 import argparse
 from pathlib import Path
 
-from tide.fetch import REGISTRY, fetch_pinned_tasks
+from reef_eval.fetch import REGISTRY, fetch_pinned_tasks
 
-# The pin lives in tide.fetch.REGISTRY, so this script and
+# The pin lives in reef_eval.fetch.REGISTRY, so this script and
 # `fetch.benchmark("swebench-verified")` can never resolve different commits.
 # Upstream: harbor-datasets (no license, so never vendored).
 PIN = REGISTRY["swebench-verified"]
@@ -47,7 +47,7 @@ def main() -> None:
         limit=args.limit,
     )
     print(f"fetched {len(copied)} SWE-bench Verified task(s) -> {dest}")
-    print("stream them: tide stream swebench-verified --agent <a> --model <m>")
+    print("stream them: reef-eval stream swebench-verified --agent <a> --model <m>")
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ encoded as the ``run`` template:
 and each is best-effort so that metering or fallback trouble never masks
 the run's own outcome.
 
-Custom frameworks (OpenEvolve, CORAL) subclass ``TideHarnessBase``
+Custom frameworks (OpenEvolve, CORAL) subclass ``ReefEvalHarnessBase``
 directly and use its command-pipeline utilities (``_checked``,
 ``_populate_usage``, ...). Adapters for Harbor-native agents list it
 first and delegate ``_launch`` to Harbor's own agent; see
@@ -40,13 +40,13 @@ from harbor.agents.base import BaseAgent
 logger = logging.getLogger(__name__)
 
 HARNESS_FINALIZE = Path(__file__).parent / "finalize.py"
-REMOTE_FINALIZE = "/tmp/tide_finalize.py"
+REMOTE_FINALIZE = "/tmp/reef_eval_finalize.py"
 
 
-class TideHarnessBase(BaseAgent):
+class ReefEvalHarnessBase(BaseAgent):
     """The procedure template plus the helpers every harness runs on."""
 
-    remote_root = Path("/opt/tide-harness")
+    remote_root = Path("/opt/reef-eval-harness")
 
     # ------------------------------------------------------------- SOP
 

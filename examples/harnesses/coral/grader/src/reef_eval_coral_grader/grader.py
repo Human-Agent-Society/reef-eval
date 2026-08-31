@@ -1,11 +1,11 @@
-"""CORAL ``TaskGrader`` implementation backed by tide."""
+"""CORAL ``TaskGrader`` implementation backed by reef_eval."""
 
 from pathlib import Path
 
 from coral.grader import TaskGrader
 from coral.types import Score, ScoreBundle
 
-from tide_coral_grader.judge import SubmissionBudgetExhausted, submit_file
+from reef_eval_coral_grader.judge import SubmissionBudgetExhausted, submit_file
 
 
 class Grader(TaskGrader):

@@ -2,7 +2,7 @@
 
 This is a method, not a harness. It runs inside the task container, where
 ``minimal_harness.py`` puts it, and it also runs on its own under
-``tide run ... --local``.
+``reef-eval run ... --local``.
 
 Pure stdlib, no LLM, no keys. It shows the whole contract from the
 method's side: generate candidates, POST them to ``$JUDGE_URL/submit``,

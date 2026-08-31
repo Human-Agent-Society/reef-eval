@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from tide import FakeExecutor, Lab, Stream
-from tide.executors import STATE_TARGET, apply_state_mount
+from reef_eval import FakeExecutor, Lab, Stream
+from reef_eval.executors import STATE_TARGET, apply_state_mount
 
 AGENT = {"name": "nop"}
 
@@ -183,10 +183,10 @@ def test_apply_state_mount_preserves_existing_config():
         {"environment": {"env": {"ALSO": "2"}}, "timeout_multiplier": 2.0},
         "/host/state",
     )
-    assert agent["env"] == {"TIDE_STATE_DIR": STATE_TARGET, "KEEP": "1"}
+    assert agent["env"] == {"REEF_EVAL_STATE_DIR": STATE_TARGET, "KEEP": "1"}
     assert overrides["timeout_multiplier"] == 2.0
     env_cfg = overrides["environment"]
-    assert env_cfg["env"] == {"TIDE_STATE_DIR": STATE_TARGET, "ALSO": "2"}
+    assert env_cfg["env"] == {"REEF_EVAL_STATE_DIR": STATE_TARGET, "ALSO": "2"}
     assert env_cfg["mounts"] == [
         {"type": "bind", "source": "/host/state", "target": STATE_TARGET}
     ]

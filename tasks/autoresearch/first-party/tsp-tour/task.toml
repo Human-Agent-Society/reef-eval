@@ -4,7 +4,7 @@ schema_version = "1.4"
 artifacts = []
 
 [task]
-name = "tide/tsp-tour"
+name = "reef-eval/tsp-tour"
 description = "Find a short closed tour over 40 fixed cities. Reward = identity-tour length / your length (>1 is an improvement)."
 
 [metadata]

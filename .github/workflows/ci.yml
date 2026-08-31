@@ -29,13 +29,13 @@ jobs:
           uv run python examples/stream_quickstart.py
       - name: CLI smoke (offline)
         run: |
-          uv run tide list
-          uv run tide run autoresearch/first-party --agent oracle --fake --lab runs/ci-smoke
-          uv run tide stream autoresearch/first-party --name ci-week --agent oracle --fake --lab runs/ci-smoke
-          uv run tide report --lab runs/ci-smoke
+          uv run reef-eval list
+          uv run reef-eval run autoresearch/first-party --agent oracle --fake --lab runs/ci-smoke
+          uv run reef-eval stream autoresearch/first-party --name ci-week --agent oracle --fake --lab runs/ci-smoke
+          uv run reef-eval report --lab runs/ci-smoke
       - name: Local mode (real scoring, no Docker)
         run: |
-          uv run tide run autoresearch/first-party/circle-packing --local \
+          uv run reef-eval run autoresearch/first-party/circle-packing --local \
             --command "python examples/random_search.py" \
             --budget 0.002 --lab runs/ci-local
-          uv run tide report --lab runs/ci-local
+          uv run reef-eval report --lab runs/ci-local

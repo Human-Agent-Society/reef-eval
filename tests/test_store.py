@@ -1,7 +1,7 @@
 import pytest
 
-from tide.store import Store
-from tide.types import Row
+from reef_eval.store import Store
+from reef_eval.types import Row
 
 
 @pytest.fixture()

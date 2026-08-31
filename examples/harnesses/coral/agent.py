@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from examples.harnesses.base import TideHarnessBase
+from examples.harnesses.base import ReefEvalHarnessBase
 from examples.harnesses.coral.auth import write_codex_auth
 from examples.harnesses.coral.config import coral_config
 
@@ -19,8 +19,8 @@ CORAL_VERSION = "0.7.16"
 CODEX_VERSION = "0.147.0"
 
 
-class CoralHarness(TideHarnessBase):
-    """Run a multi-agent CORAL organization against tide's judge."""
+class CoralHarness(ReefEvalHarnessBase):
+    """Run a multi-agent CORAL organization against reef-eval's judge."""
 
     def __init__(self, *args: Any, agents: int = 2, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -50,7 +50,7 @@ class CoralHarness(TideHarnessBase):
         )
 
     async def _prepare(self, instruction, environment) -> dict[str, Any]:
-        env = {**self.extra_env, "CODEX_HOME": "/tmp/tide-codex-home"}
+        env = {**self.extra_env, "CODEX_HOME": "/tmp/reef-eval-codex-home"}
         self._require_api_key(env)
         model = self._model_name()
         with tempfile.TemporaryDirectory() as tmp:
@@ -74,7 +74,7 @@ class CoralHarness(TideHarnessBase):
             )
             (bundle / "seed" / "AGENTS.md").write_text(
                 "Optimize solution.json. Use `coral eval` only for candidates "
-                "worth spending a tide judge submission on.\n"
+                "worth spending a reef-eval judge submission on.\n"
             )
             config = coral_config(instruction, model, agents=self.agents)
             (bundle / "task.yaml").write_text(json.dumps(config, indent=2))
@@ -92,8 +92,8 @@ class CoralHarness(TideHarnessBase):
                 [
                     f"cd {shlex.quote(str(self._remote / 'seed'))}",
                     "git init",
-                    "git config user.name tide-harness",
-                    "git config user.email tide-harness@example.invalid",
+                    "git config user.name reef-eval-harness",
+                    "git config user.email reef-eval-harness@example.invalid",
                     "git add .",
                     "git commit -m seed",
                     f"cd {shlex.quote(str(self._remote))}",

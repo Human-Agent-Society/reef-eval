@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from tide.types import Row
+from reef_eval.types import Row
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS results (
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS results (
     uri        TEXT,
     created_at REAL NOT NULL
 );
--- tide's own reads go through the primary key or load the whole table into
+-- reef-eval's own reads go through the primary key or load the whole table into
 -- pandas, so these indexes are for querying results.sqlite directly, which
 -- the data model treats as a supported way to audit a run.
 CREATE INDEX IF NOT EXISTS idx_results_kind ON results (kind);

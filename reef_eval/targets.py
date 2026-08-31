@@ -2,8 +2,8 @@
 
 A target is a task directory, a folder of tasks (a benchmark or a whole
 regime), a known benchmark name that downloads on first use, or a Harbor
-registry id (``org/name``) that passes through untouched. `tide run`,
-`tide stream`, and :func:`tasks` all accept the same ones and expand them
+registry id (``org/name``) that passes through untouched. `reef-eval run`,
+`reef-eval stream`, and :func:`tasks` all accept the same ones and expand them
 the same way, so a benchmark names the same tasks in the same order from
 the CLI and from a script.
 """
@@ -15,11 +15,11 @@ from pathlib import Path
 
 
 def find_tasks_root(tasks_dir: str | Path | None = None) -> Path | None:
-    """Locate the tasks catalog: explicit arg → ``$TIDE_TASKS_DIR`` → ``./tasks``
-    → the checkout the tide package itself lives in."""
+    """Locate the tasks catalog: explicit arg → ``$REEF_EVAL_TASKS_DIR`` → ``./tasks``
+    → the checkout the reef-eval package itself lives in."""
     if tasks_dir:
         return Path(tasks_dir)
-    env = os.environ.get("TIDE_TASKS_DIR")
+    env = os.environ.get("REEF_EVAL_TASKS_DIR")
     if env:
         return Path(env)
     for base in (Path.cwd(), Path(__file__).parent.parent):
@@ -39,7 +39,7 @@ def tasks_under(path: Path) -> list[Path]:
 
     The skip test looks only at the parts below *path*: the search root
     itself may sit anywhere, including under a dot-directory (benchmarks
-    download to ``~/.cache/tide`` by default).
+    download to ``~/.cache/reef-eval`` by default).
     """
     found = []
     for task_toml in path.glob("**/task.toml"):
@@ -59,7 +59,7 @@ def _expand(target: str, candidate: Path) -> list[str] | None:
         if not inside:
             raise ValueError(
                 f"'{target}' is a directory but contains no task.toml. "
-                "Fetch its tasks first (see its README, or `tide fetch`)."
+                "Fetch its tasks first (see its README, or `reef-eval fetch`)."
             )
         return [str(t) for t in inside]
     return None
@@ -67,7 +67,7 @@ def _expand(target: str, candidate: Path) -> list[str] | None:
 
 def _fetch_known_benchmark(target: str) -> list[str] | None:
     """Download a known benchmark on first use (pip installs have no tasks/)."""
-    from tide import fetch
+    from reef_eval import fetch
 
     name = target.split("/", 1)[0]
     if name not in fetch.BENCHMARKS and name not in fetch.REGISTRY:
@@ -109,13 +109,13 @@ def resolve(targets: list[str], tasks_root: Path | None) -> list[str]:
                 # Harbor registry ids are always org/name, so a bare word that
                 # matched nothing local cannot be one. Saying so here beats
                 # letting Harbor fail on it with a schema error.
-                from tide import fetch
+                from reef_eval import fetch
 
                 raise ValueError(
                     f"'{target}' is not a task directory, a folder of tasks, or "
                     f"a known benchmark ({', '.join(fetch.known_benchmarks())}). "
                     "Harbor registry ids look like 'org/name'. "
-                    "Run `tide list` to see what is available here."
+                    "Run `reef-eval list` to see what is available here."
                 )
     return resolved
 
@@ -124,11 +124,11 @@ def tasks(*targets: str, tasks_dir: str | Path | None = None) -> list[str]:
     """The tasks *targets* name, as a list of task references.
 
     Takes what the CLI takes and returns it in the CLI's order, so
-    ``tasks("cl-bench")`` is the list `tide stream cl-bench` runs. It is an
+    ``tasks("cl-bench")`` is the list `reef-eval stream cl-bench` runs. It is an
     ordinary list: filter it, reorder it, or repeat an entry before handing
-    it to :class:`tide.Stream`, which runs exactly the list it is given.
+    it to :class:`reef_eval.Stream`, which runs exactly the list it is given.
 
     ``tasks_dir`` points at a tasks catalog to search; by default the same
-    one the CLI uses (``$TIDE_TASKS_DIR``, ``./tasks``, or the checkout).
+    one the CLI uses (``$REEF_EVAL_TASKS_DIR``, ``./tasks``, or the checkout).
     """
     return resolve(list(targets), find_tasks_root(tasks_dir))

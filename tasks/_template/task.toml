@@ -5,7 +5,7 @@ schema_version = "1.4"
 artifacts = []
 
 [task]
-name = "tide/my-task"                        # TODO(task): name it
+name = "reef-eval/my-task"                        # TODO(task): name it
 description = "Placeholder: maximize x in [0, 1]; reward = x. TODO(task): describe yours"
 
 [metadata]

@@ -1,4 +1,4 @@
-"""Initial OpenEvolve candidate for tide's three-circle packing task."""
+"""Initial OpenEvolve candidate for reef-eval's three-circle packing task."""
 
 import json
 

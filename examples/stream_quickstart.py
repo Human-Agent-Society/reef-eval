@@ -11,7 +11,7 @@ real tasks and a real agent when you have Docker; see the README.
 import asyncio
 from pathlib import Path
 
-from tide import FakeExecutor, Lab, Stream, metrics
+from reef_eval import FakeExecutor, Lab, Stream, metrics
 
 
 def remembering_agent(spec):

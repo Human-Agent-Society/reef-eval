@@ -11,7 +11,7 @@ the task has one, else the best session score), then writes:
 - ``/logs/verifier/reward.json``: ``{"reward": <float>}``
 - ``/logs/verifier/reason.txt``: the human-readable reason
 - ``/logs/verifier/submissions.jsonl``: one ``{"t", "score"}`` line per
-  submission; tide ingests these as the trusted score-over-time curve.
+  submission; reef-eval ingests these as the trusted score-over-time curve.
 
 If ``$VERIFIER_JUDGE_URL`` is set it is used directly; otherwise the
 verifier URL is derived from ``$JUDGE_URL`` by incrementing the port.

@@ -13,7 +13,7 @@ import asyncio
 import os
 from pathlib import Path
 
-from tide import Lab
+from reef_eval import Lab
 
 TASK = str(
     Path(__file__).parent.parent

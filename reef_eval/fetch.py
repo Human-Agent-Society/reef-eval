@@ -36,7 +36,7 @@ def fetch_pinned_tasks(
     """
     dest = Path(dest)
     prefix = f"{subdir.rstrip('/')}/" if subdir else ""
-    with tempfile.TemporaryDirectory(prefix="tide-fetch-") as tmp_str:
+    with tempfile.TemporaryDirectory(prefix="reef-eval-fetch-") as tmp_str:
         tmp = Path(tmp_str)
         _git(tmp, "init", "-q")
         _git(tmp, "remote", "add", "origin", git_url)
@@ -147,17 +147,17 @@ def known_benchmarks() -> list[str]:
 
 
 def cache_home() -> Path:
-    if "TIDE_CACHE" in os.environ:
-        return Path(os.environ["TIDE_CACHE"])
-    return Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "tide"
+    if "REEF_EVAL_CACHE" in os.environ:
+        return Path(os.environ["REEF_EVAL_CACHE"])
+    return Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "reef-eval"
 
 
 def benchmark(name: str, *, limit: int | None = None) -> Path:
     """Return a local directory with the benchmark's tasks, downloading on
     first use.
 
-    Tasks are cached under ``~/.cache/tide`` (override with ``TIDE_CACHE``)
-    per release ref, so a given tide version always sees the same tasks. A
+    Tasks are cached under ``~/.cache/reef-eval`` (override with ``REEF_EVAL_CACHE``)
+    per release ref, so a given reef-eval version always sees the same tasks. A
     repo checkout does not need this: its ``tasks/`` folder already has
     everything.
     """
@@ -165,8 +165,8 @@ def benchmark(name: str, *, limit: int | None = None) -> Path:
         source = REGISTRY[name]
         repo, ref, subdir = source.repo, source.ref, source.subdir
     elif name in BENCHMARKS:
-        repo = os.environ.get("TIDE_TASKS_REPO", TASKS_REPO)
-        ref = os.environ.get("TIDE_TASKS_REF", TASKS_REF)
+        repo = os.environ.get("REEF_EVAL_TASKS_REPO", TASKS_REPO)
+        ref = os.environ.get("REEF_EVAL_TASKS_REF", TASKS_REF)
         subdir = BENCHMARKS[name]
     else:
         raise ValueError(

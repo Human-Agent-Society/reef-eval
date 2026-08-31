@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from examples.harnesses.base import TideHarnessBase
+from examples.harnesses.base import ReefEvalHarnessBase
 from examples.harnesses.openevolve.config import openevolve_config
 
 HERE = Path(__file__).parent
@@ -17,8 +17,8 @@ HARNESS_VERSION = "0.1.1"
 OPENEVOLVE_VERSION = "0.3.2"
 
 
-class OpenEvolveHarness(TideHarnessBase):
-    """Run OpenEvolve inside the task container against tide's judge.
+class OpenEvolveHarness(ReefEvalHarnessBase):
+    """Run OpenEvolve inside the task container against reef-eval's judge.
 
     No ``_finalize``: every evaluation spends a judge submission by
     construction, so the verifier's log covers the run on its own.
@@ -78,7 +78,7 @@ class OpenEvolveHarness(TideHarnessBase):
                     str(self.iterations),
                 ]
             ),
-            "run_env": {**env, "TIDE_USAGE_FILE": str(usage_path)},
+            "run_env": {**env, "REEF_EVAL_USAGE_FILE": str(usage_path)},
             "usage_path": usage_path,
         }
 

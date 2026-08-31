@@ -8,7 +8,7 @@ fake scorer reacts to; they are not defined anywhere else.
 Real runs replace the FakeExecutor with the default HarborExecutor and a
 real agent:
 
-    tide run autoresearch/first-party --agent claude-code --model ...
+    reef-eval run autoresearch/first-party --agent claude-code --model ...
     python examples/minimal_harness.py                      # your own harness
 
     python examples/quickstart.py
@@ -16,8 +16,8 @@ real agent:
 
 import asyncio
 
-from tide import FakeExecutor, Lab, metrics
-from tide.types import TracePoint
+from reef_eval import FakeExecutor, Lab, metrics
+from reef_eval.types import TracePoint
 
 # Simulate: "strong" scores 0.6, anyone else 0.3; every episode also
 # carries a two-point submission log.

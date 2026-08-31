@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from tide.fetch import fetch_pinned_tasks
+from reef_eval.fetch import fetch_pinned_tasks
 
 
 def _git(cwd: Path, *args: str) -> str:
@@ -99,8 +99,8 @@ def test_empty_scope_is_loud(upstream, tmp_path):
 
 
 def _benchmark_upstream(tmp_path):
-    """A local stand-in for the tide repo: one benchmark with one task."""
-    repo = tmp_path / "tide-repo"
+    """A local stand-in for the reef-eval repo: one benchmark with one task."""
+    repo = tmp_path / "reef-eval-repo"
     task = repo / "tasks" / "autoresearch" / "first-party" / "alpha"
     task.mkdir(parents=True)
     (task / "task.toml").write_text('name = "alpha"\n')
@@ -115,13 +115,13 @@ def _benchmark_upstream(tmp_path):
 
 
 def test_benchmark_downloads_once_then_caches(tmp_path, monkeypatch):
-    from tide import fetch
+    from reef_eval import fetch
 
     repo = _benchmark_upstream(tmp_path)
     sha = _git(repo, "rev-parse", "HEAD").strip()
-    monkeypatch.setenv("TIDE_TASKS_REPO", f"file://{repo}")
-    monkeypatch.setenv("TIDE_TASKS_REF", sha)
-    monkeypatch.setenv("TIDE_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("REEF_EVAL_TASKS_REPO", f"file://{repo}")
+    monkeypatch.setenv("REEF_EVAL_TASKS_REF", sha)
+    monkeypatch.setenv("REEF_EVAL_CACHE", str(tmp_path / "cache"))
 
     dest = fetch.benchmark("first-party")
     assert (dest / "alpha" / "task.toml").exists()
@@ -135,15 +135,15 @@ def test_benchmark_downloads_once_then_caches(tmp_path, monkeypatch):
 
 
 def test_benchmark_unknown_name_is_loud():
-    from tide import fetch
+    from reef_eval import fetch
 
     with pytest.raises(ValueError, match="unknown benchmark"):
         fetch.benchmark("nope")
 
 
 def test_resolve_targets_downloads_known_benchmarks(tmp_path, monkeypatch):
-    from tide import fetch
-    from tide.cli import resolve_targets
+    from reef_eval import fetch
+    from reef_eval.cli import resolve_targets
 
     bench = tmp_path / "bench"
     (bench / "alpha").mkdir(parents=True)
@@ -160,10 +160,10 @@ def test_resolve_targets_downloads_known_benchmarks(tmp_path, monkeypatch):
 
 
 def test_register_makes_a_benchmark_downloadable(upstream, tmp_path, monkeypatch):
-    from tide import fetch
+    from reef_eval import fetch
 
     url, sha = upstream
-    monkeypatch.setenv("TIDE_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("REEF_EVAL_CACHE", str(tmp_path / "cache"))
     monkeypatch.setitem(fetch.REGISTRY, "my-bench", fetch.Source(url, sha))
 
     dest = fetch.benchmark("my-bench")
@@ -172,11 +172,11 @@ def test_register_makes_a_benchmark_downloadable(upstream, tmp_path, monkeypatch
 
 
 def test_register_resolves_in_the_cli(upstream, tmp_path, monkeypatch):
-    from tide import fetch
-    from tide.cli import resolve_targets
+    from reef_eval import fetch
+    from reef_eval.cli import resolve_targets
 
     url, sha = upstream
-    monkeypatch.setenv("TIDE_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("REEF_EVAL_CACHE", str(tmp_path / "cache"))
     monkeypatch.setitem(fetch.REGISTRY, "my-bench", fetch.Source(url, sha))
 
     hits = resolve_targets(["my-bench/beta"], None)
@@ -185,7 +185,7 @@ def test_register_resolves_in_the_cli(upstream, tmp_path, monkeypatch):
 
 def test_register_overrides_a_builtin():
     """The registry wins over the built-in table, so a fork can take a name."""
-    from tide import fetch
+    from reef_eval import fetch
 
     fetch.register("cl-bench", "https://example.com/fork.git", "abc123")
     try:

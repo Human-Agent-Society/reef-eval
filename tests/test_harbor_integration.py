@@ -1,6 +1,6 @@
 """Harbor-dependent tests: skipped cleanly when harbor isn't installed.
 
-These pin the *mapping* between tide and Harbor (config assembly, task
+These pin the *mapping* between reef-eval and Harbor (config assembly, task
 validation) without running containers. Full end-to-end runs live in
 examples/ and require Docker.
 """
@@ -40,10 +40,10 @@ def test_trial_config_assembly_matches_executor():
 
 def test_state_mount_maps_onto_trial_config():
     """A stream's state_dir override must assemble into valid Harbor config:
-    a bind mount on the main service plus TIDE_STATE_DIR on both sides."""
+    a bind mount on the main service plus REEF_EVAL_STATE_DIR on both sides."""
     from harbor.models.trial.config import TaskConfig, TrialConfig
 
-    from tide.executors import STATE_TARGET, apply_state_mount
+    from reef_eval.executors import STATE_TARGET, apply_state_mount
 
     agent, overrides = apply_state_mount({"name": "nop"}, {}, "/host/streams/s1/state")
     config = TrialConfig.model_validate(
@@ -57,8 +57,8 @@ def test_state_mount_maps_onto_trial_config():
     assert config.environment.mounts == [
         {"type": "bind", "source": "/host/streams/s1/state", "target": STATE_TARGET}
     ]
-    assert config.environment.env["TIDE_STATE_DIR"] == STATE_TARGET
-    assert config.agent.env["TIDE_STATE_DIR"] == STATE_TARGET
+    assert config.environment.env["REEF_EVAL_STATE_DIR"] == STATE_TARGET
+    assert config.agent.env["REEF_EVAL_STATE_DIR"] == STATE_TARGET
 
 
 def test_exemplar_task_is_valid_stock_harbor(request):
@@ -89,7 +89,7 @@ def test_unset_compose_variables_are_caught_before_the_run(tmp_path):
     """A task whose compose needs a variable nobody sets would run to a score
     of 0 that looks like the agent's fault: Compose reads an unset variable as
     an empty string, so the mount silently points elsewhere."""
-    from tide.executors import _unset_compose_vars
+    from reef_eval.executors import _unset_compose_vars
 
     environment = tmp_path / "environment"
     environment.mkdir()
@@ -113,7 +113,7 @@ def test_unset_compose_variables_are_caught_before_the_run(tmp_path):
 
 
 def test_self_contained_tasks_need_nothing_set():
-    from tide.executors import _unset_compose_vars
+    from reef_eval.executors import _unset_compose_vars
 
     root = Path(__file__).parent.parent / "tasks"
     assert _unset_compose_vars(root / "_template") == []

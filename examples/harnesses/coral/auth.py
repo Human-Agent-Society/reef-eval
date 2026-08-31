@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from examples.harnesses.base import TideHarnessBase
+from examples.harnesses.base import ReefEvalHarnessBase
 
 
 async def write_codex_auth(
-    agent: TideHarnessBase, environment, env: dict[str, str]
+    agent: ReefEvalHarnessBase, environment, env: dict[str, str]
 ) -> None:
     command = """python - <<'PY'
 import json

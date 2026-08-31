@@ -16,7 +16,7 @@ answer; every query (including ones that error) costs budget, the final
 answer is free, and results cap at 50 rows. If you answer correctly, your
 reward is 1 minus the fraction of the budget you spent; a wrong answer
 scores 0 — so knowledge you carried in from earlier questions
-(`$TIDE_STATE_DIR`) is worth real points.
+(`$REEF_EVAL_STATE_DIR`) is worth real points.
 
 Run a query:
 
@@ -30,5 +30,5 @@ description of how to get it:
 
 Submitting is terminal: after it (or after the budget runs out) the
 question is over. Record what you learned about the schema in
-`$TIDE_STATE_DIR` before you finish — the next questions use the same
+`$REEF_EVAL_STATE_DIR` before you finish — the next questions use the same
 database.

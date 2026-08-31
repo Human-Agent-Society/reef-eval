@@ -4,9 +4,9 @@
 ([paper](https://arxiv.org/pdf/2606.05661), Apache-2.0): expert-validated
 tasks where an agent works through sequential instances of one
 environment and should improve by remembering what it saw. Their "system"
-(agent plus memory strategy) maps to tide's agent plus carried
-`$TIDE_STATE_DIR`, and their gain metric (stateful minus stateless
-reward) is `metrics.transfer` against a plain isolated `tide run` sweep.
+(agent plus memory strategy) maps to reef-eval's agent plus carried
+`$REEF_EVAL_STATE_DIR`, and their gain metric (stateful minus stateless
+reward) is `metrics.transfer` against a plain isolated `reef-eval run` sweep.
 
 All six domains are converted: 301 tasks, the benchmark's full instance
 count, committed to this repo. One instance = one task; name order
@@ -46,7 +46,7 @@ Deviations from upstream, per domain: sales, cohort, and codebase swap
 the upstream step- or action-metered interaction for free shell work
 under a time budget (codebase's step-count reward becomes pass/fail, and
 cohort's six-tool API becomes direct SQLite access); the persistent
-workspace is `$TIDE_STATE_DIR` rather than a reused `/app`; and where
+workspace is `$REEF_EVAL_STATE_DIR` rather than a reused `/app`; and where
 upstream delivered feedback conversationally, the instructions carry the
 same information (dbx includes the previous question's correct answer).
 The dbx query budget and the poker deal are not deviations; the sidecar
@@ -55,9 +55,9 @@ enforces them exactly.
 The tasks are committed, so they run out of the box:
 
 ```bash
-tide stream cl-bench --agent claude-code   # every domain, in order
-tide stream tasks/continual-learning/cl-bench/poker-* --agent claude-code
-tide fetch cl-bench bsm sales    # only to regenerate from the pinned sources
+reef-eval stream cl-bench --agent claude-code   # every domain, in order
+reef-eval stream tasks/continual-learning/cl-bench/poker-* --agent claude-code
+reef-eval fetch cl-bench bsm sales    # only to regenerate from the pinned sources
 ```
 
 Regenerating downloads from the pinned upstream commit and HuggingFace

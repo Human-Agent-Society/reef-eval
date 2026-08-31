@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from tide import Lab, LocalExecutor
+from reef_eval import Lab, LocalExecutor
 
 TASKS = sorted(
     (Path(__file__).parent.parent / "tasks" / "autoresearch" / "first-party").iterdir()

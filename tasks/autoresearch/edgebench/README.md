@@ -42,7 +42,7 @@ Note: tasks reference EdgeBench's prebuilt work/judge images; pull access
 follows their docs (`sforge pull`).
 
 **Fidelity vs upstream.** EdgeBench's own harness runs its judge as a live
-server during the session, and tide's first-party tasks now use the same
+server during the session, and reef-eval's first-party tasks now use the same
 shape (a judge sidecar scoring limited submissions, peak counted). This
 conversion, however, still maps their judge onto a run-once separate
 verifier: converted tasks give the agent only the work environment's own

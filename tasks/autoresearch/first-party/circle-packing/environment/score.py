@@ -8,7 +8,7 @@ environment (including tampering with the public scorer) can reach this code.
 Conservative by construction: exact Fraction comparisons with the documented
 1e-9 tolerance, so buying radius with float-epsilon overlaps scores zero.
 
-Protocol (uniform across tide's first-party tasks): ``grade(path)`` is pure
+Protocol (uniform across reef-eval's first-party tasks): ``grade(path)`` is pure
 and takes the artifact path explicitly; ``find_artifact()`` resolves the
 canonical location; ``__main__`` writes a numbers-only ``reward.json`` plus a
 human ``reason.txt``.

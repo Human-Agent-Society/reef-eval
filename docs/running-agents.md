@@ -25,8 +25,8 @@ trigger or observe it. Everything else (how you search, what you
 evaluate locally, whether you build your own scorer) is up to you.
 
 If the run set a [budget](get-started.md#budgets) beyond time, the container
-also carries `TIDE_MAX_SUBMISSIONS` and/or `TIDE_MAX_TOKENS`. Read them
-if your method should pace itself; tide records the actual spend either
+also carries `REEF_EVAL_MAX_SUBMISSIONS` and/or `REEF_EVAL_MAX_TOKENS`. Read them
+if your method should pace itself; reef-eval records the actual spend either
 way.
 
 ## The continual-learning contract
@@ -34,13 +34,13 @@ way.
 A [stream](get-started.md#streams) episode is an ordinary Harbor task graded
 by its verifier; the judge endpoint exists only on autoresearch tasks.
 The one addition is
-`$TIDE_STATE_DIR`: a directory mounted into every container of the
+`$REEF_EVAL_STATE_DIR`: a directory mounted into every container of the
 stream and carried from task to task. Read it at the start, write
-whatever your future self should know; tide snapshots it after every
+whatever your future self should know; reef-eval snapshots it after every
 task and never reads it. The format is yours: notes, a skill library, an
 evolved harness.
 
-tide only sets the variable. Making the agent use it is part of your
+reef-eval only sets the variable. Making the agent use it is part of your
 method: a custom harness reads it directly, and a supported harness
 needs the run's instruction or system prompt to point at it.
 
@@ -56,9 +56,9 @@ problem.
 `nop` (does nothing; catches leakage):
 
 ```bash
-tide run frontier-cs/frontier-cs-2-0-vllm-llm-serving-optimization --agent claude-code --model anthropic/claude-opus-5
-tide run frontier-cs/frontier-cs-algorithm-1 --agent codex --budget 2h
-tide stream cl-bench --agent claude-code --model anthropic/claude-opus-5
+reef-eval run frontier-cs/frontier-cs-2-0-vllm-llm-serving-optimization --agent claude-code --model anthropic/claude-opus-5
+reef-eval run frontier-cs/frontier-cs-algorithm-1 --agent codex --budget 2h
+reef-eval stream cl-bench --agent claude-code --model anthropic/claude-opus-5
 ```
 
 The instruction tells the harness the submission protocol; `--budget` sets
@@ -87,7 +87,7 @@ endpoint. Widen the allowlist per run, with no task edits, through the
 
 ```python
 import asyncio
-from tide import Lab
+from reef_eval import Lab
 
 INSTALL_HOSTS = [  # setup phase: apt / nvm / node / npm
     "deb.debian.org",

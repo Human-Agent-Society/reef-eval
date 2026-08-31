@@ -18,7 +18,7 @@ Occupational health cohort based in industrial and urban manufacturing districts
 The study's patient database is `/app/study.db` (SQLite; the `patients`
 table holds one row per patient, with months to death or last follow-up
 and an event indicator). You have `sqlite3` and Python with pandas,
-numpy, and scipy. Your persistent workspace is `$TIDE_STATE_DIR` — notes
+numpy, and scipy. Your persistent workspace is `$REEF_EVAL_STATE_DIR` — notes
 and estimates you save there carry to the next study; this container is
 fresh.
 

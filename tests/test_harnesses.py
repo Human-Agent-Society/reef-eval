@@ -63,7 +63,7 @@ def _judge_server():
 
 def _load_evaluator():
     spec = importlib.util.spec_from_file_location(
-        "tide_openevolve_evaluator", OPENEVOLVE / "evaluator.py"
+        "reef_eval_openevolve_evaluator", OPENEVOLVE / "evaluator.py"
     )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -87,7 +87,7 @@ def test_openevolve_evaluator_submits_candidate_to_tide(monkeypatch):
 
 def test_coral_grader_client_uses_same_judge(tmp_path, monkeypatch):
     monkeypatch.syspath_prepend(str(CORAL_GRADER_SRC))
-    from tide_coral_grader.judge import submit_file
+    from reef_eval_coral_grader.judge import submit_file
 
     solution = tmp_path / "solution.json"
     solution.write_text('{"circles": []}')
@@ -123,7 +123,7 @@ def test_codex_harness_reuses_version_pinned_harbor_agent(tmp_path):
 
 def _load_codex_finalize():
     spec = importlib.util.spec_from_file_location(
-        "tide_codex_finalize", ROOT / "examples" / "harnesses" / "finalize.py"
+        "reef_eval_codex_finalize", ROOT / "examples" / "harnesses" / "finalize.py"
     )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -204,10 +204,12 @@ async def test_codex_fallback_submits_final_artifact_after_run(tmp_path, monkeyp
     environment = _FakeEnvironment()
     await harness.run("pack circles", environment, SimpleNamespace())
 
-    assert [target for _, target in environment.uploads] == ["/tmp/tide_finalize.py"]
+    assert [target for _, target in environment.uploads] == [
+        "/tmp/reef_eval_finalize.py"
+    ]
     assert environment.commands == [
         "pwd",
-        "python3 /tmp/tide_finalize.py /app/solution.json",
+        "python3 /tmp/reef_eval_finalize.py /app/solution.json",
     ]
 
 
@@ -232,7 +234,7 @@ async def test_codex_fallback_survives_agent_crash_and_env_failure(
     environment = _FakeEnvironment()
     with pytest.raises(TimeoutError):
         await harness.run("pack circles", environment, SimpleNamespace())
-    assert any("tide_finalize" in command for command in environment.commands)
+    assert any("reef_eval_finalize" in command for command in environment.commands)
 
     # ...a broken environment never turns the fallback into a trial failure...
     monkeypatch.setattr(Codex, "run", fake_run_noop)
@@ -260,15 +262,15 @@ async def test_coral_finalize_submits_shared_repo_solution(tmp_path, monkeypatch
 
     monkeypatch.setattr(harness, "_submit_final_artifact", fake_submit)
     await harness._finalize(SimpleNamespace())
-    assert submitted == ["/opt/tide-harness/coral/seed/solution.json"]
+    assert submitted == ["/opt/reef-eval-harness/coral/seed/solution.json"]
 
 
 def _recording_harness(tmp_path, events: list[str], fail_at: str | None = None):
-    """A concrete TideHarnessBase recording the SOP phases it runs, in order."""
+    """A concrete ReefEvalHarnessBase recording the SOP phases it runs, in order."""
     pytest.importorskip("harbor")
-    from examples.harnesses.base import TideHarnessBase
+    from examples.harnesses.base import ReefEvalHarnessBase
 
-    class Harness(TideHarnessBase):
+    class Harness(ReefEvalHarnessBase):
         @staticmethod
         def name() -> str:
             return "sop-test"
@@ -328,14 +330,14 @@ async def test_sop_finalize_and_usage_never_mask_the_run(tmp_path):
         assert events == ["prepare", "launch", "finalize", "collect_usage"]
 
 
-def test_generated_configs_keep_tide_as_the_scorer():
+def test_generated_configs_keep_reef_eval_as_the_scorer():
     evolve = openevolve_config("test-model", "https://example.test/v1")
     assert evolve["llm"]["primary_model"] == "test-model"
     assert evolve["llm"]["api_base"] == "https://example.test/v1"
     assert evolve["evaluator"]["parallel_evaluations"] == 1
 
     coral = coral_config("pack circles", "test-model", agents=3)
-    assert coral["grader"]["entrypoint"] == "tide_coral_grader.grader:Grader"
+    assert coral["grader"]["entrypoint"] == "reef_eval_coral_grader.grader:Grader"
     assert coral["agents"] == {
         "count": 3,
         "runtime": "codex",
@@ -385,11 +387,11 @@ def test_base_harness_populates_context_tokens(tmp_path):
     from harbor.agents.base import BaseAgent
     from harbor.models.agent.context import AgentContext
 
-    from examples.harnesses.base import TideHarnessBase
+    from examples.harnesses.base import ReefEvalHarnessBase
 
-    assert issubclass(TideHarnessBase, BaseAgent)
+    assert issubclass(ReefEvalHarnessBase, BaseAgent)
 
-    class _UsageHarness(TideHarnessBase):
+    class _UsageHarness(ReefEvalHarnessBase):
         @staticmethod
         def name() -> str:
             return "usage-test"
@@ -430,9 +432,9 @@ def test_base_harness_populates_context_tokens(tmp_path):
 def test_openevolve_usage_tracking_records_sdk_usage(tmp_path, monkeypatch):
     pytest.importorskip("openevolve")
     usage_path = tmp_path / "usage.jsonl"
-    monkeypatch.setenv("TIDE_USAGE_FILE", str(usage_path))
+    monkeypatch.setenv("REEF_EVAL_USAGE_FILE", str(usage_path))
     spec = importlib.util.spec_from_file_location(
-        "tide_openevolve_usage", OPENEVOLVE / "usage.py"
+        "reef_eval_openevolve_usage", OPENEVOLVE / "usage.py"
     )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -462,7 +464,7 @@ def test_openevolve_runner_installs_tracking_before_cli(monkeypatch):
     pytest.importorskip("openevolve")
     monkeypatch.syspath_prepend(str(OPENEVOLVE))
     spec = importlib.util.spec_from_file_location(
-        "tide_openevolve_runner", OPENEVOLVE / "runner.py"
+        "reef_eval_openevolve_runner", OPENEVOLVE / "runner.py"
     )
     assert spec and spec.loader
     runner = importlib.util.module_from_spec(spec)

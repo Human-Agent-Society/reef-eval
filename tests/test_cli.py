@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from tide.cli import main, resolve_targets
+from reef_eval.cli import main, resolve_targets
 
 TASKS_ROOT = Path(__file__).parent.parent / "tasks"
 
@@ -21,10 +21,10 @@ def test_resolve_category_expands_and_skips_template():
 
 
 def test_resolve_under_a_dot_directory_root(tmp_path):
-    """Benchmarks download to ~/.cache/tide, so a tasks root under a
+    """Benchmarks download to ~/.cache/reef-eval, so a tasks root under a
     dot-directory must still resolve. Only the parts below the root decide
     whether a task is skipped."""
-    root = tmp_path / ".cache" / "tide" / "tasks" / "v0.1.0" / "edgebench"
+    root = tmp_path / ".cache" / "reef-eval" / "tasks" / "v0.1.0" / "edgebench"
     (root / "real-task").mkdir(parents=True)
     (root / "real-task" / "task.toml").write_text('name = "real-task"\n')
     (root / "_template").mkdir()
@@ -128,7 +128,7 @@ def test_stream_fake_end_to_end(tmp_path, capsys):
     assert "[  0] tsp-tour" in out and "[  1] bin-packing" in out
 
     assert main(argv) == 0  # re-running a stream resumes (skips) it
-    from tide import Lab
+    from reef_eval import Lab
 
     df = Lab(lab).df("episode")
     assert len(df) == 2
@@ -137,7 +137,7 @@ def test_stream_fake_end_to_end(tmp_path, capsys):
 
 
 def test_stream_name_defaults_to_the_targets(tmp_path, capsys):
-    """`tide stream` takes targets positionally, like `tide run`. Without
+    """`reef-eval stream` takes targets positionally, like `reef-eval run`. Without
     --name the label comes from what was asked for, so no target can be
     silently swallowed as a name."""
     lab = str(tmp_path / "lab")
@@ -158,7 +158,7 @@ def test_stream_name_defaults_to_the_targets(tmp_path, capsys):
         )
         == 0
     )
-    from tide import Lab
+    from reef_eval import Lab
 
     df = Lab(lab).df("episode")
     assert len(df) == 2  # both targets ran; neither became the name
@@ -200,7 +200,7 @@ def test_stream_shuffle_is_deterministic_and_seed_scoped(tmp_path, capsys):
         "--lab",
         lab,
     ]
-    from tide import Lab
+    from reef_eval import Lab
 
     assert main([*base, "--shuffle", "7"]) == 0
     assert main([*base, "--shuffle", "7"]) == 0  # same seed = same stream: resumes
@@ -220,25 +220,25 @@ def test_stream_shuffle_is_deterministic_and_seed_scoped(tmp_path, capsys):
 
 
 def test_list_shows_downloaded_benchmarks(tmp_path, capsys, monkeypatch):
-    """A pip install has no tasks/ folder, so `tide list` has to look in the
-    download cache too, or it reports nothing right after `tide fetch`."""
-    cache = tmp_path / ".cache" / "tide"
+    """A pip install has no tasks/ folder, so `reef-eval list` has to look in the
+    download cache too, or it reports nothing right after `reef-eval fetch`."""
+    cache = tmp_path / ".cache" / "reef-eval"
     bench = cache / "tasks" / "v9.9.9" / "demo-bench" / "a-task"
     bench.mkdir(parents=True)
     (bench / "task.toml").write_text('name = "a-task"\n')
-    monkeypatch.setenv("TIDE_CACHE", str(cache))
+    monkeypatch.setenv("REEF_EVAL_CACHE", str(cache))
 
     assert main(["--tasks-dir", str(tmp_path / "no-such-tasks"), "list"]) == 0
     out = capsys.readouterr().out
     assert "demo-bench (1 tasks)" in out
-    assert "tide run demo-bench/<task>" in out
+    assert "reef-eval run demo-bench/<task>" in out
 
 
 def test_list_with_nothing_available_points_at_fetch(tmp_path, capsys, monkeypatch):
-    monkeypatch.setenv("TIDE_CACHE", str(tmp_path / "empty-cache"))
+    monkeypatch.setenv("REEF_EVAL_CACHE", str(tmp_path / "empty-cache"))
     assert main(["--tasks-dir", str(tmp_path / "no-such-tasks"), "list"]) == 1
     out = capsys.readouterr().out
-    assert "tide fetch" in out and "cl-bench" in out
+    assert "reef-eval fetch" in out and "cl-bench" in out
 
 
 def test_list_and_fetch_errors(capsys):
