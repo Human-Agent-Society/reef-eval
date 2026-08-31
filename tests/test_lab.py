@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from tide import FakeExecutor, Lab
-from tide.types import EpisodeResult, TracePoint
+from reef_eval import FakeExecutor, Lab
+from reef_eval.types import EpisodeResult, TracePoint
 
 
 @pytest.fixture()

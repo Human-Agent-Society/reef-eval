@@ -9,7 +9,7 @@ One round = one task named ``sales-iNN``. Data rooms are generated with
 the vendored upstream code (``vendor_sales.py``), so files match the
 benchmark exactly. Upstream keeps a persistent ``/app`` workspace and
 injects prediction-vs-actual feedback; here the persistent workspace is
-``$TIDE_STATE_DIR`` and the refreshed data room carries the realized
+``$REEF_EVAL_STATE_DIR`` and the refreshed data room carries the realized
 numbers, so the agent reconstructs the same feedback from its own saved
 predictions.
 """
@@ -81,7 +81,7 @@ def task_name(instance: dict) -> str:
 
 def render_instruction(instance: dict, data_room, profile) -> str:
     """The upstream instance prompt, adapted to the Harbor setting: the
-    persistent workspace is $TIDE_STATE_DIR and the answer is a JSON file."""
+    persistent workspace is $REEF_EVAL_STATE_DIR and the answer is a JSON file."""
     year = instance["target_year"]
     years = list(range(year, year + instance["forecast_horizon"]))
     pairs = [
@@ -122,7 +122,7 @@ that started in the year 2026. **This is year {year}.** You are called back
 each year through 2045 to make predictions; each round the data room is
 refreshed and you make a new 5-year forecast.
 
-Your persistent workspace is `$TIDE_STATE_DIR` — anything you save there
+Your persistent workspace is `$REEF_EVAL_STATE_DIR` — anything you save there
 (data, models, notes, code) carries forward to the next year, while this
 container and `/app` are fresh. Your value grows as you develop
 **institutional knowledge** about the company's sales data — which product

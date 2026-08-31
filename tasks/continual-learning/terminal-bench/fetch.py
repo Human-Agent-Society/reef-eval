@@ -12,13 +12,13 @@ to this script unchanged, since they are already stock Harbor tasks; nothing
 is converted. All 89 are committed to the repo; running this script
 re-syncs them from the pin. Then:
 
-    tide stream terminal-bench --agent claude-code --model anthropic/claude-opus-5
+    reef-eval stream terminal-bench --agent claude-code --model anthropic/claude-opus-5
 """
 
 import argparse
 from pathlib import Path
 
-from tide.fetch import fetch_pinned_tasks
+from reef_eval.fetch import fetch_pinned_tasks
 
 # The exact commit the Harbor registry pins as terminal-bench v2.0.
 # Upstream: harbor-framework/terminal-bench-2 (Apache-2.0).
@@ -41,7 +41,7 @@ def main() -> None:
         GIT_URL, COMMIT, dest, only=args.tasks or None, limit=args.limit
     )
     print(f"fetched {len(copied)} terminal-bench 2.0 task(s) -> {dest}")
-    print("stream them: tide stream terminal-bench --agent <a> --model <m>")
+    print("stream them: reef-eval stream terminal-bench --agent <a> --model <m>")
 
 
 if __name__ == "__main__":

@@ -227,7 +227,7 @@ def main() -> None:
         total += count
         print(f"  {name}: converted {count} task(s), {description}")
     print(f"{total} CL-Bench task(s) -> {HERE}")
-    print("stream a domain: tide stream cl-bench/sales-* --agent <a>")
+    print("stream a domain: reef-eval stream cl-bench/sales-* --agent <a>")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 # tasks/: the benchmark catalog
 
-> **Where this sits**: the framework is `tide/`; this folder is the tasks
+> **Where this sits**: the framework is `reef_eval/`; this folder is the tasks
 > it runs, grouped by regime. `autoresearch/` holds the six first-party
 > tasks (`first-party/`) plus EdgeBench and FrontierCS; `continual-learning/`
 > holds terminal-bench, SWE-bench Verified, and CL-Bench. Committed tasks
 > can be browsed and run directly; each benchmark's `fetch.py` regenerates
 > them from the published sources. CLI targets resolve at either level:
-> `tide run edgebench/<task>` and `tide stream terminal-bench` both work.
+> `reef-eval run edgebench/<task>` and `reef-eval stream terminal-bench` both work.
 
 Throughout this catalog, `oracle` is Harbor's built-in agent that runs a
 task's reference `solution/` (which submits once to the judge), the
@@ -16,7 +16,7 @@ always:
 ```python
 await lab.run(
     "tasks/autoresearch/first-party/tsp-tour", {"name": "oracle"}
-)  # through tide
+)  # through reef-eval
 ```
 ```bash
 harbor trial start -p tasks/autoresearch/first-party/tsp-tour                  # stock Harbor, standalone
@@ -56,7 +56,7 @@ states the oracle baseline and what the task teaches.
 
 ## External benchmarks: continual-learning streams
 
-Benchmarks for `tide stream`. terminal-bench and CL-Bench tasks are
+Benchmarks for `reef-eval stream`. terminal-bench and CL-Bench tasks are
 **committed** (Apache-2.0): browse and run them directly; each
 `fetch.py` regenerates them from its pinned sources. SWE-bench Verified's
 dataset repo carries no license, so those tasks are the exception:
@@ -64,9 +64,9 @@ fetched onto your machine, never committed.
 
 | Folder | Upstream | Get the tasks |
 |---|---|---|
-| [`terminal-bench/`](continual-learning/terminal-bench) | [terminal-bench 2.0](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) · 89 terminal tasks · **v2.0 only, 1.x unsupported** | **all 89 committed**; `tide fetch terminal-bench` re-syncs from the pin |
-| [`swebench-verified/`](continual-learning/swebench-verified) | [SWE-bench Verified](https://github.com/SWE-bench/SWE-bench) via [harbor-datasets](https://github.com/laude-institute/harbor-datasets) (no license) · 500 issue-fixing tasks · the hardest [AgentStream](https://arxiv.org/abs/2608.00155) benchmark with a Harbor version | `tide fetch swebench-verified --limit 50` |
-| [`cl-bench/`](continual-learning/cl-bench) | [CL-Bench](https://www.continual-learning-bench.com) (Apache-2.0) · continual learning over sequential instances of one environment · **all 6 domains converted, 301 tasks** (spectrum, sales, cohorts, PR bugfixes, metered SQL, poker) · upstream metrics, deterministic and offline; hidden state lives in judge sidecars | **all 301 committed**; `tide fetch cl-bench` regenerates from the pins |
+| [`terminal-bench/`](continual-learning/terminal-bench) | [terminal-bench 2.0](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) · 89 terminal tasks · **v2.0 only, 1.x unsupported** | **all 89 committed**; `reef-eval fetch terminal-bench` re-syncs from the pin |
+| [`swebench-verified/`](continual-learning/swebench-verified) | [SWE-bench Verified](https://github.com/SWE-bench/SWE-bench) via [harbor-datasets](https://github.com/laude-institute/harbor-datasets) (no license) · 500 issue-fixing tasks · the hardest [AgentStream](https://arxiv.org/abs/2608.00155) benchmark with a Harbor version | `reef-eval fetch swebench-verified --limit 50` |
+| [`cl-bench/`](continual-learning/cl-bench) | [CL-Bench](https://www.continual-learning-bench.com) (Apache-2.0) · continual learning over sequential instances of one environment · **all 6 domains converted, 301 tasks** (spectrum, sales, cohorts, PR bugfixes, metered SQL, poker) · upstream metrics, deterministic and offline; hidden state lives in judge sidecars | **all 301 committed**; `reef-eval fetch cl-bench` regenerates from the pins |
 
 ## Adding a new benchmark
 

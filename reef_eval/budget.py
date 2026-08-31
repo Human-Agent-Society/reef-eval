@@ -1,9 +1,9 @@
 """Budget: how much an episode is allowed to spend.
 
 A run is bounded by whichever resource is scarce: wall-clock time, judge
-evaluations (submissions), or tokens. tide models all three the same
+evaluations (submissions), or tokens. reef-eval models all three the same
 way. Each dimension is set on the run, delivered to the agent as a
-``TIDE_*`` environment variable (:meth:`Budget.to_env`), and recorded as a
+``REEF_EVAL_*`` environment variable (:meth:`Budget.to_env`), and recorded as a
 ``budget_*`` tag (:meth:`Budget.to_tags`). The actual spend comes back as
 ``used_*`` columns.
 
@@ -13,7 +13,7 @@ verifier still grades the best submission so far. ``max_submissions`` is
 enforced by the judge up to the task's own ``judge_config.json`` ceiling;
 a lower per-run value is a signal the agent is asked to honor, because
 Harbor cannot inject env into the judge sidecar. ``max_tokens`` is a soft
-signal: tide cannot halt a black-box harness mid-generation, so it passes
+signal: reef-eval cannot halt a black-box harness mid-generation, so it passes
 the limit to the agent and records the true spend regardless.
 
 Set the scarce dimension and leave the rest ``None``.
@@ -71,11 +71,11 @@ class Budget:
         """
         env: dict[str, str] = {}
         if self.time_h is not None:
-            env["TIDE_BUDGET_SEC"] = repr(self.timeout_sec())
+            env["REEF_EVAL_BUDGET_SEC"] = repr(self.timeout_sec())
         if self.max_submissions is not None:
-            env["TIDE_MAX_SUBMISSIONS"] = str(self.max_submissions)
+            env["REEF_EVAL_MAX_SUBMISSIONS"] = str(self.max_submissions)
         if self.max_tokens is not None:
-            env["TIDE_MAX_TOKENS"] = str(self.max_tokens)
+            env["REEF_EVAL_MAX_TOKENS"] = str(self.max_tokens)
         return env
 
     def to_tags(self) -> dict[str, Any]:

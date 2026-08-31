@@ -5,7 +5,7 @@ that started in the year 2026. **This is year 2029.** You are called back
 each year through 2045 to make predictions; each round the data room is
 refreshed and you make a new 5-year forecast.
 
-Your persistent workspace is `$TIDE_STATE_DIR` — anything you save there
+Your persistent workspace is `$REEF_EVAL_STATE_DIR` — anything you save there
 (data, models, notes, code) carries forward to the next year, while this
 container and `/app` are fresh. Your value grows as you develop
 **institutional knowledge** about the company's sales data — which product

@@ -26,7 +26,7 @@ which is 2.6 GB for all 188 problems and so is not committed here. The
 generated `docker-compose.yaml` mounts it through
 `$FRONTIER_CS_ALGORITHMIC_PATH`, and Compose reads an unset variable as an
 empty string, so without it the judge starts, fails to find anything, and
-returns 0. tide checks for the variable and refuses the run instead.
+returns 0. reef-eval checks for the variable and refuses the run instead.
 
 Fetch the data for the problems you mean to run, and they are ready:
 
@@ -45,8 +45,8 @@ The 2.0 track is self-contained and needs none of this.
 Run any task:
 
 ```bash
-tide run frontier-cs/frontier-cs-2-0-erdos-demo --agent oracle
-tide run frontier-cs/frontier-cs-algorithm-1 --agent claude-code --model anthropic/claude-opus-5
+reef-eval run frontier-cs/frontier-cs-2-0-erdos-demo --agent oracle
+reef-eval run frontier-cs/frontier-cs-algorithm-1 --agent claude-code --model anthropic/claude-opus-5
 ```
 
 Regenerate any task from upstream (ids pick the track: numeric =

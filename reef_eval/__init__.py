@@ -1,4 +1,4 @@
-"""tide: autoresearch and continual-learning evaluation on the Harbor
+"""reef-eval: autoresearch and continual-learning evaluation on the Harbor
 task standard.
 
 One primitive, the episode (one Harbor trial): a task run under an agent
@@ -12,16 +12,16 @@ carried agent state).
 
 :class:`Lab` runs episodes into an append-only results store,
 :class:`Stream` sequences them with carried state, and
-:mod:`tide.metrics` turns the store into curves.
+:mod:`reef_eval.metrics` turns the store into curves.
 """
 
-from tide import metrics
-from tide.budget import Budget
-from tide.executors import FakeExecutor, HarborExecutor, LocalExecutor
-from tide.lab import Lab
-from tide.stream import Stream
-from tide.targets import tasks
-from tide.types import EpisodeResult, EpisodeSpec, Row, TracePoint
+from reef_eval import metrics
+from reef_eval.budget import Budget
+from reef_eval.executors import FakeExecutor, HarborExecutor, LocalExecutor
+from reef_eval.lab import Lab
+from reef_eval.stream import Stream
+from reef_eval.targets import tasks
+from reef_eval.types import EpisodeResult, EpisodeSpec, Row, TracePoint
 
 __version__ = "0.1.0"
 

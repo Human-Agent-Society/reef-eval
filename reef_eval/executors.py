@@ -6,16 +6,16 @@ without Docker and lets the same orchestration drive containers today and
 anything else later.
 
 - :class:`HarborExecutor`: the benchmark run (containers, judge sidecar,
-  verifier). Harbor is imported lazily so the rest of tide works without it.
+  verifier). Harbor is imported lazily so the rest of reef-eval works without it.
 - :class:`LocalExecutor`: the development run, with the task's real judge
   as a local process and no containers.
 - :class:`FakeExecutor`: deterministic, instant, dependency-free. Used by
   the test suite and the quickstart demo.
 
-Executors recognize one tide-level override, ``state_dir``: a host
-directory that :class:`tide.stream.Stream` carries across episodes.
+Executors recognize one reef-eval-level override, ``state_dir``: a host
+directory that :class:`reef_eval.stream.Stream` carries across episodes.
 Harbor mounts it into the agent's container at :data:`STATE_TARGET` and
-sets ``$TIDE_STATE_DIR``; the local executor passes the host path itself.
+sets ``$REEF_EVAL_STATE_DIR``; the local executor passes the host path itself.
 The judge and verifier never see it.
 """
 
@@ -37,17 +37,17 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any, Protocol
 
-from tide.submissions import load_trace
-from tide.types import EpisodeResult, EpisodeSpec, TracePoint
+from reef_eval.submissions import load_trace
+from reef_eval.types import EpisodeResult, EpisodeSpec, TracePoint
 
-logger = logging.getLogger("tide")
+logger = logging.getLogger("reef-eval")
 
 
 class Executor(Protocol):
     async def execute(self, spec: EpisodeSpec) -> EpisodeResult: ...
 
 
-STATE_TARGET = "/tide/state"
+STATE_TARGET = "/reef_eval/state"
 """Where a stream's state directory appears inside the agent's container."""
 
 
@@ -57,15 +57,15 @@ def apply_state_mount(
     """Add a stream's state directory to Harbor trial config.
 
     Mounts *state_dir* into the agent's container at :data:`STATE_TARGET`
-    and sets ``$TIDE_STATE_DIR`` both at container startup and through the
+    and sets ``$REEF_EVAL_STATE_DIR`` both at container startup and through the
     agent adapter. Existing mounts and env entries are preserved.
     """
     mount = {"type": "bind", "source": state_dir, "target": STATE_TARGET}
     env_cfg = dict(overrides.get("environment") or {})
     env_cfg["mounts"] = [*(env_cfg.get("mounts") or []), mount]
-    env_cfg["env"] = {"TIDE_STATE_DIR": STATE_TARGET, **(env_cfg.get("env") or {})}
+    env_cfg["env"] = {"REEF_EVAL_STATE_DIR": STATE_TARGET, **(env_cfg.get("env") or {})}
     agent = dict(agent)
-    agent["env"] = {"TIDE_STATE_DIR": STATE_TARGET, **agent.get("env", {})}
+    agent["env"] = {"REEF_EVAL_STATE_DIR": STATE_TARGET, **agent.get("env", {})}
     return agent, {**overrides, "environment": env_cfg}
 
 
@@ -271,7 +271,7 @@ class LocalExecutor:
         state_dir = spec.overrides.get("state_dir")
         if state_dir:
             Path(state_dir).mkdir(parents=True, exist_ok=True)
-            state_env["TIDE_STATE_DIR"] = str(state_dir)
+            state_env["REEF_EVAL_STATE_DIR"] = str(state_dir)
 
         workdir = Path(tempfile.mkdtemp(prefix=f"{task_dir.name}-", dir=self.root))
         data_dir = workdir / "judge_data"
@@ -291,7 +291,7 @@ class LocalExecutor:
                         "JUDGE_URL": judge_url,
                         "BUDGET_SEC": str(budget),
                         **state_env,  # a stream's carried state, if any
-                        # Budget signals (TIDE_MAX_TOKENS, ...) the command may pace on.
+                        # Budget signals (REEF_EVAL_MAX_TOKENS, ...) the command may pace on.
                         **spec.agent.get("env", {}),
                     },
                     timeout=float(budget),

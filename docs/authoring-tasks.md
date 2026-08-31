@@ -1,7 +1,7 @@
 # Authoring tasks & benchmarks
 
 Tasks are **100% stock Harbor tasks**, validated against Harbor's
-`TaskConfig` by `tests/test_task_suite.py`; tide adds conventions around
+`TaskConfig` by `tests/test_task_suite.py`; reef-eval adds conventions around
 the format, never fields inside it. Start from
 [`tasks/_template`](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/_template), a working
 placeholder task (maximize `x` in `[0, 1]`) that passes the suite before
@@ -163,7 +163,7 @@ the GPU model as a tag so curves never mix hardware.
 ## A continual-learning task
 
 Any stock Harbor task runs in a [stream](get-started.md#streams)
-unchanged: tide mounts the carried memory directory itself, and a
+unchanged: reef-eval mounts the carried memory directory itself, and a
 pass/fail verifier is a fine score (a pass is a 0-or-1 reward). Two
 conventions from the committed benchmarks are worth copying:
 
@@ -189,8 +189,8 @@ my-bench/
 A path runs as-is, and a folder placed in the catalog resolves by name:
 
 ```bash
-tide run path/to/my-bench --agent oracle       # any directory of tasks
-tide run my-bench --agent oracle               # once it sits in tasks/<regime>/my-bench
+reef-eval run path/to/my-bench --agent oracle       # any directory of tasks
+reef-eval run my-bench --agent oracle               # once it sits in tasks/<regime>/my-bench
 ```
 
 In a checkout, `tests/test_task_suite.py` picks up every task under
@@ -199,7 +199,7 @@ To distribute one, publish the directory in any git repository and
 register the pin, the way gym environments register:
 
 ```python
-from tide import fetch
+from reef_eval import fetch
 
 fetch.register("my-bench", "https://github.com/me/my-bench.git", "<commit or tag>")
 tasks = fetch.benchmark("my-bench")  # downloads on first use, then cached
@@ -208,7 +208,7 @@ tasks = fetch.benchmark("my-bench")  # downloads on first use, then cached
 `subdir=` points inside the repo when the tasks are not at its root. The
 registry is per process, the way gym's is: a script that calls `register`
 can pass `fetch.benchmark("my-bench") / "task-01"` straight to `Lab.run`,
-while the shell `tide` command sees only the built-ins, so give it the
+while the shell `reef-eval` command sees only the built-ins, so give it the
 fetched path. Ship the `register` call in your package's import;
 registering an existing name replaces it, which is how a fork takes over
 a built-in.

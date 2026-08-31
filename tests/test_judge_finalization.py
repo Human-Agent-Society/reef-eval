@@ -14,7 +14,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from tide.executors import _start_judge as start_judge
+from reef_eval.executors import _start_judge as start_judge
 
 TEMPLATE = Path(__file__).parent.parent / "tasks" / "_template"
 JUDGE_SERVER = TEMPLATE / "environment" / "judge_server.py"
@@ -45,7 +45,7 @@ def _start_judge(tmp_path, judge_dir=None, with_final=False):
             "    return {'reward': x, 'reason': 'ok'}\n"
         )
 
-    # Reuse tide's launcher rather than a second copy of it: it retries a
+    # Reuse reef-eval's launcher rather than a second copy of it: it retries a
     # lost port race, which is what made this file flaky.
     (judge_dir / "judge_server.py").write_text(JUDGE_SERVER.read_text())
     data_dir = tmp_path / "data"

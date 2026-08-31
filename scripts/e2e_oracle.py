@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from tide import Lab
+from reef_eval import Lab
 
 TASKS_ROOT = Path(__file__).parent.parent / "tasks"
 

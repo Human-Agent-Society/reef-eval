@@ -10,7 +10,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "tide/**"
+      - "reef_eval/**"
       - "tasks/**"
       - "scripts/e2e_oracle.py"
       - "pyproject.toml"
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - name: Install tide + harbor
+      - name: Install reef-eval + harbor
         run: |
           uv venv --python 3.12
           uv pip install -e ".[harbor]"   # the pin lives in pyproject.toml

@@ -11,18 +11,18 @@ def coral_config(
     *,
     agents: int = 2,
 ) -> dict[str, Any]:
-    """Return a CORAL task whose only grader is the tide judge."""
+    """Return a CORAL task whose only grader is the reef-eval judge."""
     description = f"""{instruction}
 
 Work on solution.json. It must contain exactly the JSON solution described above.
-Run `coral eval` whenever a candidate is worth spending one tide submission on.
-The returned score and feedback come directly from the tide judge. Keep the best
+Run `coral eval` whenever a candidate is worth spending one reef-eval submission on.
+The returned score and feedback come directly from the reef-eval judge. Keep the best
 candidate in solution.json and commit useful improvements so the other agents can
 build on them.
 """
     return {
         "task": {
-            "name": "tide benchmark",
+            "name": "reef-eval benchmark",
             "description": description,
             "tips": (
                 "Submissions are limited. Use local checks for cheap filtering and "
@@ -30,7 +30,7 @@ build on them.
             ),
         },
         "grader": {
-            "entrypoint": "tide_coral_grader.grader:Grader",
+            "entrypoint": "reef_eval_coral_grader.grader:Grader",
             "setup": ["uv pip install -e ./grader"],
             "timeout": 60,
             "direction": "maximize",

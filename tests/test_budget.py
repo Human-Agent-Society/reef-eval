@@ -5,8 +5,8 @@ import asyncio
 
 import pytest
 
-from tide import Budget, Lab
-from tide.types import EpisodeResult
+from reef_eval import Budget, Lab
+from reef_eval.types import EpisodeResult
 
 
 class RecordingExecutor:
@@ -30,7 +30,7 @@ def test_bare_number_is_hours():
 
 
 def test_duration_strings():
-    from tide.budget import parse_duration_hours
+    from reef_eval.budget import parse_duration_hours
 
     assert parse_duration_hours("2h") == 2.0
     assert parse_duration_hours("30m") == pytest.approx(0.5)
@@ -71,8 +71,8 @@ def test_is_empty():
 
 def test_to_env_only_set_dimensions():
     env = Budget(max_tokens=500_000, max_submissions=25).to_env()
-    assert env == {"TIDE_MAX_TOKENS": "500000", "TIDE_MAX_SUBMISSIONS": "25"}
-    assert "TIDE_BUDGET_SEC" not in env  # time not set
+    assert env == {"REEF_EVAL_MAX_TOKENS": "500000", "REEF_EVAL_MAX_SUBMISSIONS": "25"}
+    assert "REEF_EVAL_BUDGET_SEC" not in env  # time not set
 
 
 def test_to_tags_keeps_budget_hours_for_backcompat():
@@ -98,8 +98,8 @@ def test_budget_sets_timeout_env_and_tags(tmp_path):
     # hard time -> container timeout
     assert ex.spec.agent["override_timeout_sec"] == 7200.0
     # signals delivered to agent (local/exec) AND container startup env
-    assert ex.spec.agent["env"]["TIDE_MAX_TOKENS"] == "500000"
-    assert ex.spec.overrides["environment"]["env"]["TIDE_MAX_SUBMISSIONS"] == "50"
+    assert ex.spec.agent["env"]["REEF_EVAL_MAX_TOKENS"] == "500000"
+    assert ex.spec.overrides["environment"]["env"]["REEF_EVAL_MAX_SUBMISSIONS"] == "50"
     # budget recorded as grouping tags
     assert row.tags["budget"] == 2
     assert row.tags["budget_max_tokens"] == 500_000
@@ -133,7 +133,7 @@ def test_max_evals_on_a_task_without_a_judge_warns(tmp_path, caplog):
     task = tmp_path / "verifier-only"
     (task / "environment").mkdir(parents=True)
     lab = Lab(tmp_path / "lab", executor=RecordingExecutor())
-    with caplog.at_level("WARNING", logger="tide"):
+    with caplog.at_level("WARNING", logger="reef-eval"):
         asyncio.run(lab.run(str(task), {"name": "a"}, budget=Budget(max_submissions=5)))
         # once per Lab, however many episodes hit the same condition
         asyncio.run(lab.run(str(task), {"name": "b"}, budget=Budget(max_submissions=5)))
@@ -145,7 +145,7 @@ def test_no_warning_when_the_task_has_a_judge(tmp_path, caplog):
     (task / "environment").mkdir(parents=True)
     (task / "environment" / "judge_config.json").write_text('{"max_submissions": 100}')
     lab = Lab(tmp_path / "lab", executor=RecordingExecutor())
-    with caplog.at_level("WARNING", logger="tide"):
+    with caplog.at_level("WARNING", logger="reef-eval"):
         asyncio.run(lab.run(str(task), {"name": "a"}, budget=Budget(max_submissions=5)))
     assert not [r for r in caplog.records if "has no judge" in r.message]
 
@@ -154,7 +154,7 @@ def test_no_warning_for_time_and_token_budgets(tmp_path, caplog):
     task = tmp_path / "verifier-only"
     (task / "environment").mkdir(parents=True)
     lab = Lab(tmp_path / "lab", executor=RecordingExecutor())
-    with caplog.at_level("WARNING", logger="tide"):
+    with caplog.at_level("WARNING", logger="reef-eval"):
         asyncio.run(
             lab.run(str(task), {"name": "a"}, budget=Budget(time_h=1, max_tokens=1000))
         )
@@ -165,7 +165,7 @@ def test_no_warning_for_time_and_token_budgets(tmp_path, caplog):
 
 
 def test_harbor_usage_from_agent_context():
-    from tide.executors import _harbor_usage
+    from reef_eval.executors import _harbor_usage
 
     class Ctx:
         n_input_tokens = 1200
@@ -180,7 +180,7 @@ def test_harbor_usage_from_agent_context():
 
 
 def test_harbor_usage_handles_missing_context():
-    from tide.executors import _harbor_usage
+    from reef_eval.executors import _harbor_usage
 
     assert _harbor_usage(None, n_submissions=3) == {"n_submissions": 3.0}
 
@@ -191,7 +191,7 @@ def test_harbor_usage_handles_missing_context():
 def test_efficiency_reward_per_unit():
     import pandas as pd
 
-    from tide import metrics
+    from reef_eval import metrics
 
     df = pd.DataFrame(
         [
@@ -211,7 +211,7 @@ def test_efficiency_says_so_when_the_spend_column_is_absent():
     real answer is that the column asked for was never recorded."""
     import pandas as pd
 
-    from tide import metrics
+    from reef_eval import metrics
 
     df = pd.DataFrame([{"reward": 1.0, "used_n_submissions": 4}])
     with pytest.raises(KeyError, match="used_n_submissions"):
@@ -223,7 +223,7 @@ def test_efficiency_drops_runs_that_reported_no_spend():
     as a column that does not exist."""
     import pandas as pd
 
-    from tide import metrics
+    from reef_eval import metrics
 
     df = pd.DataFrame(
         [

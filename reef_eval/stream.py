@@ -2,8 +2,8 @@
 
 A :class:`Stream` runs an ordered list of Harbor tasks under one agent and
 carries a state directory between them. Each task runs in a fresh
-container with the directory mounted at ``$TIDE_STATE_DIR``; whatever the
-agent writes there is visible in the next task. tide never reads the
+container with the directory mounted at ``$REEF_EVAL_STATE_DIR``; whatever the
+agent writes there is visible in the next task. reef-eval never reads the
 contents; an agent that ignores the directory is the stateless
 baseline.
 
@@ -14,8 +14,8 @@ appending tasks extends a finished stream, while editing an earlier task
 re-runs everything after it.
 
 Rows land in the Lab's store tagged ``stream`` and ``position``. See
-:func:`tide.metrics.learning_curve`, :func:`tide.metrics.transfer`, and
-:func:`tide.metrics.forgetting` for the matching metrics.
+:func:`reef_eval.metrics.learning_curve`, :func:`reef_eval.metrics.transfer`, and
+:func:`reef_eval.metrics.forgetting` for the matching metrics.
 """
 
 from __future__ import annotations
@@ -26,13 +26,13 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from tide.budget import Budget
-from tide.types import Row, Tags
+from reef_eval.budget import Budget
+from reef_eval.types import Row, Tags
 
 if TYPE_CHECKING:
-    from tide.lab import Lab
+    from reef_eval.lab import Lab
 
-logger = logging.getLogger("tide")
+logger = logging.getLogger("reef-eval")
 
 
 class Stream:
@@ -60,7 +60,7 @@ class Stream:
         """Run every task in order, carrying state; returns one Row each.
 
         ``agent``, ``budget``, and ``**overrides`` mean the same as on
-        :meth:`tide.lab.Lab.run` and apply to every task. ``tags`` are
+        :meth:`reef_eval.lab.Lab.run` and apply to every task. ``tags`` are
         recorded on every row, plus ``stream`` and ``position``.
 
         Tasks run sequentially because each one's starting state is the
@@ -139,7 +139,7 @@ class Stream:
         and reuses their snapshots, while editing a position changes every
         prefix after it.
         """
-        from tide.lab import Lab
+        from reef_eval.lab import Lab
 
         return Lab._digest({"variant": variant, "prefix": self.tasks[: position + 1]})
 
@@ -152,7 +152,7 @@ class Stream:
     ) -> str:
         """One digest per setup, so the same stream name under two agents
         (or budgets) keeps separate state and keys."""
-        from tide.lab import Lab
+        from reef_eval.lab import Lab
 
         return Lab._digest(
             {

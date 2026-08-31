@@ -1,9 +1,9 @@
 # Design
 
-The ideas tide is built on. For the practical pages see
+The ideas reef-eval is built on. For the practical pages see
 [get started](get-started.md) and [running agents](running-agents.md).
 
-tide measures what an agent keeps. Something learned during a run counts
+reef-eval measures what an agent keeps. Something learned during a run counts
 when it outlives the episode: memory, a skill library, an evolved
 harness, updated weights. In-context reasoning and a retry after an error
 count only when what they produced is kept for later runs. The form that
@@ -24,7 +24,7 @@ Harbor tasks under one agent, the setting used in
 [CL-Bench](https://arxiv.org/pdf/2606.05661). Each position is an
 ordinary episode with its own container and its own trusted row, and the
 only thing connecting them is the state directory the agent carries
-(`$TIDE_STATE_DIR`). The measurement is the difference that state makes:
+(`$REEF_EVAL_STATE_DIR`). The measurement is the difference that state makes:
 the learning curve over positions, transfer against the same tasks run
 alone, forgetting on revisited tasks.
 
@@ -99,14 +99,14 @@ sequenceDiagram
     participant S as results store
 
     loop each task in the list, in order
-        D->>A: restore the previous snapshot, mount it at $TIDE_STATE_DIR
+        D->>A: restore the previous snapshot, mount it at $REEF_EVAL_STATE_DIR
         A->>A: work the task · write what should carry to that directory
         Note over A: the episode ends (task done or budget spent)
         A->>V: the finished container, graded from outside it
         V->>S: 1 trusted episode row, tagged stream and position
         A->>D: snapshot the ending state as snapshots/00N-…
     end
-    Note over D,S: the directory reaches the next position and nothing else:<br/>tide never reads it, and it never reaches the verifier or the score
+    Note over D,S: the directory reaches the next position and nothing else:<br/>reef-eval never reads it, and it never reaches the verifier or the score
 ```
 
 The snapshots are kept, so a step's memory can be read back afterwards

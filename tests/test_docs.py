@@ -71,7 +71,7 @@ def test_relative_links_and_anchors_resolve(doc):
 
 # Benchmarks whose tasks are committed, so the count is checkable here.
 # SWE-bench Verified is fetched (its upstream has no license), so its 500
-# tasks exist only on a machine that ran `tide fetch`.
+# tasks exist only on a machine that ran `reef-eval fetch`.
 BENCHMARKS = [
     "autoresearch/first-party",
     "autoresearch/edgebench",
@@ -83,7 +83,7 @@ COUNTED_IN = ["README.md", "docs/tasks.md", "tasks/README.md"]
 
 
 def _task_count(benchmark: str) -> int:
-    from tide.targets import tasks_under
+    from reef_eval.targets import tasks_under
 
     return len(tasks_under(ROOT / "tasks" / benchmark))
 

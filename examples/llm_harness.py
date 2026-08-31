@@ -31,7 +31,7 @@ from pathlib import Path
 
 from harbor.agents.base import BaseAgent
 
-from tide import Lab, metrics
+from reef_eval import Lab, metrics
 
 TASK = str(
     Path(__file__).parent.parent

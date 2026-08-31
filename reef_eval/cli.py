@@ -1,17 +1,17 @@
-"""The tide CLI: one command from any task to a scored result.
+"""The reef-eval CLI: one command from any task to a scored result.
 
-    tide list                                           # everything runnable here
-    tide run tasks/autoresearch/first-party/circle-packing --agent oracle
-    tide run autoresearch/first-party --agent claude-code --model anthropic/claude-opus-5
-    tide run edgebench/ann_vector_search_qps --agent codex --budget 2
-    tide stream terminal-bench --agent claude-code   # continual: carried state
-    tide report                                         # summarize the results store
+    reef-eval list                                           # everything runnable here
+    reef-eval run tasks/autoresearch/first-party/circle-packing --agent oracle
+    reef-eval run autoresearch/first-party --agent claude-code --model anthropic/claude-opus-5
+    reef-eval run edgebench/ann_vector_search_qps --agent codex --budget 2
+    reef-eval stream terminal-bench --agent claude-code   # continual: carried state
+    reef-eval report                                         # summarize the results store
 
 Targets resolve in order: an explicit task directory, then every task inside
 a category or benchmark folder, then anything else passed to Harbor as a
 registry id. The CLI is a thin caller of :class:`Lab`; everything it runs
 lands in the same tagged results store (``--lab``, default ``runs/cli``), so
-re-running resumes and ``tide report`` is a query.
+re-running resumes and ``reef-eval report`` is a query.
 
 Protocols the CLI cannot express (custom schedules, control arms) are plain
 Python scripts over :class:`Lab`; see ``examples/``.
@@ -27,22 +27,22 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from tide.targets import find_tasks_root as _find_tasks_root
-from tide.targets import tasks_under as _tasks_under
+from reef_eval.targets import find_tasks_root as _find_tasks_root
+from reef_eval.targets import tasks_under as _tasks_under
 
 if TYPE_CHECKING:
-    from tide import Budget, Lab
-    from tide.types import Row
+    from reef_eval import Budget, Lab
+    from reef_eval.types import Row
 
 
 def resolve_targets(targets: list[str], tasks_root: Path | None) -> list[str]:
     """Expand CLI targets into runnable task references.
 
-    The resolution itself lives in :mod:`tide.targets`, which scripts call
-    as ``tide.tasks``. Here a target that names nothing runnable ends the
+    The resolution itself lives in :mod:`reef_eval.targets`, which scripts call
+    as ``reef_eval.tasks``. Here a target that names nothing runnable ends the
     process with the message instead of raising.
     """
-    from tide.targets import resolve
+    from reef_eval.targets import resolve
 
     try:
         return resolve(targets, tasks_root)
@@ -79,8 +79,8 @@ def _build_agent(args: argparse.Namespace) -> dict:
 
 def _build_budget(args: argparse.Namespace) -> Budget | None:
     """Assemble a Budget from the budget flags (all optional)."""
-    from tide import Budget
-    from tide.budget import parse_duration_hours
+    from reef_eval import Budget
+    from reef_eval.budget import parse_duration_hours
 
     budget = Budget(
         time_h=None if args.budget is None else parse_duration_hours(args.budget),
@@ -106,7 +106,7 @@ def _stream_name(name: str | None, targets: list[str]) -> str:
     asked for.
 
     The derived form is the first target's own name, plus how many more
-    followed, so ``tide stream terminal-bench cl-bench`` becomes
+    followed, so ``reef-eval stream terminal-bench cl-bench`` becomes
     ``terminal-bench+1more``. It is only a label: two streams with the same
     name but different tasks or setups still keep separate state.
     """
@@ -161,7 +161,7 @@ def _report_rows(rows: list[Row], lab: str, position: bool = False) -> int:
             f"  {'OK ' if ok else 'ERR'} {where}{name}: "
             f"{row.rewards or error}{_exit_note(row)}"
         )
-    print(f"\nresults stored in {lab}: `tide report --lab {lab}`")
+    print(f"\nresults stored in {lab}: `reef-eval report --lab {lab}`")
     return 1 if failures else 0
 
 
@@ -177,10 +177,10 @@ def _exit_note(row: Row) -> str:
 
 
 def _enable_progress() -> None:
-    """Show the tide logger's per-episode progress lines on stderr."""
+    """Show the reef-eval logger's per-episode progress lines on stderr."""
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter("%(message)s"))
-    logger = logging.getLogger("tide")
+    logger = logging.getLogger("reef-eval")
     logger.setLevel(logging.INFO)
     logger.addHandler(handler)
 
@@ -194,8 +194,8 @@ def _first_build_hint(args: argparse.Namespace) -> None:
 
 
 def _make_lab(args: argparse.Namespace) -> Lab:
-    from tide import FakeExecutor, Lab, LocalExecutor
-    from tide.executors import Executor
+    from reef_eval import FakeExecutor, Lab, LocalExecutor
+    from reef_eval.executors import Executor
 
     executor: Executor | None
     if getattr(args, "fake", False):
@@ -214,9 +214,9 @@ def _downloaded_benchmarks() -> list[tuple[str, Path]]:
     """Benchmarks already downloaded into the cache, as (name, directory).
 
     A pip install has no ``tasks/`` folder, so this is where its tasks live
-    once ``tide fetch`` has run.
+    once ``reef-eval fetch`` has run.
     """
-    from tide import fetch
+    from reef_eval import fetch
 
     root = fetch.cache_home() / "tasks"
     if not root.is_dir():
@@ -232,7 +232,7 @@ def _downloaded_benchmarks() -> list[tuple[str, Path]]:
 
 
 def cmd_list(args: argparse.Namespace) -> int:
-    from tide import fetch
+    from reef_eval import fetch
 
     tasks_root = _find_tasks_root(args.tasks_dir)
     listed = False
@@ -252,19 +252,19 @@ def cmd_list(args: argparse.Namespace) -> int:
             continue
         listed = True
         print(f"\ndownloaded: {name} ({count} tasks) in {path}")
-        print(f"  run with: tide run {name}/<task> --agent <a>")
+        print(f"  run with: reef-eval run {name}/<task> --agent <a>")
 
     if not listed:
         print("Nothing runnable here yet.\n")
-        print("Download a benchmark:  tide fetch <name>")
+        print("Download a benchmark:  reef-eval fetch <name>")
         print(f"  known: {', '.join(fetch.known_benchmarks())}")
         print("\nA source checkout ships every task in tasks/; from anywhere")
-        print("else, pass --tasks-dir, or give `tide run` a Harbor id (org/name).")
+        print("else, pass --tasks-dir, or give `reef-eval run` a Harbor id (org/name).")
         return 1
 
-    print("\nRun one:      tide run <name-above> --agent oracle")
+    print("\nRun one:      reef-eval run <name-above> --agent oracle")
     if from_checkout:
-        print("Run a folder: tide run autoresearch/first-party --agent oracle")
+        print("Run a folder: reef-eval run autoresearch/first-party --agent oracle")
     return 0
 
 
@@ -302,7 +302,7 @@ def cmd_run(args: argparse.Namespace) -> int:
 def cmd_stream(args: argparse.Namespace) -> int:
     _resolve_agent_flags(args)
     # Derive the label from what was typed, not from the expansion, so
-    # `tide stream terminal-bench` is named for the benchmark.
+    # `reef-eval stream terminal-bench` is named for the benchmark.
     name = _stream_name(args.name, args.targets)
     targets = resolve_targets(args.targets, _find_tasks_root(args.tasks_dir))
     agent = _build_agent(args)
@@ -316,7 +316,7 @@ def cmd_stream(args: argparse.Namespace) -> int:
         random.Random(args.shuffle).shuffle(targets)
         tags = {**tags, "shuffle_seed": args.shuffle}
 
-    from tide import Stream
+    from reef_eval import Stream
 
     _enable_progress()
     _first_build_hint(args)
@@ -332,7 +332,7 @@ def cmd_stream(args: argparse.Namespace) -> int:
 
 
 def cmd_report(args: argparse.Namespace) -> int:
-    from tide import Lab
+    from reef_eval import Lab
 
     lab = Lab(args.lab)
     df = lab.df(args.kind or None)
@@ -362,12 +362,12 @@ def cmd_fetch(args: argparse.Namespace) -> int:
         ]
         script = next((m for m in matches if m.is_file()), None)
     if script is None:
-        from tide import fetch
+        from reef_eval import fetch
 
         if args.benchmark in fetch.BENCHMARKS or args.benchmark in fetch.REGISTRY:
             dest = fetch.benchmark(args.benchmark)
             print(f"downloaded to {dest}")
-            print(f"run with: tide run {args.benchmark}/<task> --agent <a>")
+            print(f"run with: reef-eval run {args.benchmark}/<task> --agent <a>")
             return 0
         known = fetch.known_benchmarks()
         raise SystemExit(f"unknown benchmark '{args.benchmark}'; known: {known}")
@@ -380,11 +380,14 @@ def cmd_fetch(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="tide", description="autoresearch evaluation on the Harbor task standard"
+        prog="reef-eval",
+        description="autoresearch evaluation on the Harbor task standard",
     )
-    from tide import __version__
+    from reef_eval import __version__
 
-    parser.add_argument("--version", action="version", version=f"tide {__version__}")
+    parser.add_argument(
+        "--version", action="version", version=f"reef-eval {__version__}"
+    )
     parser.add_argument("--tasks-dir", default=None, help="tasks catalog root")
     sub = parser.add_subparsers(dest="command", required=True)
 

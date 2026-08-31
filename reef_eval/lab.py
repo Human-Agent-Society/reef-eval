@@ -1,4 +1,4 @@
-"""The Lab: tide's one public surface.
+"""The Lab: reef-eval's one public surface.
 
 A Lab is a directory. Inside it live the results database (``results.sqlite``)
 and, when the Harbor executor is used, the Harbor trial directories
@@ -24,11 +24,11 @@ from typing import Any
 
 import pandas as pd
 
-from tide.budget import Budget
-from tide.executors import Executor, HarborExecutor
-from tide.types import EpisodeSpec, Row, Tags
+from reef_eval.budget import Budget
+from reef_eval.executors import Executor, HarborExecutor
+from reef_eval.types import EpisodeSpec, Row, Tags
 
-logger = logging.getLogger("tide")
+logger = logging.getLogger("reef-eval")
 
 
 class Lab:
@@ -42,7 +42,7 @@ class Lab:
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
 
-        from tide.store import Store
+        from reef_eval.store import Store
 
         self.store = Store(self.root / "results.sqlite")
         self.executor: Executor = executor or HarborExecutor(self.root / "trials")
@@ -78,9 +78,9 @@ class Lab:
         fields such as ``verifier=...`` or ``timeout_multiplier=...``).
 
         ``budget`` bounds the run across any of three dimensions (time,
-        submissions, tokens); see :class:`tide.budget.Budget`.
+        submissions, tokens); see :class:`reef_eval.budget.Budget`.
         A bare number is hours. It sets the timeout, hands the agent
-        ``TIDE_*`` budget-signal env vars, and tags the episode with its
+        ``REEF_EVAL_*`` budget-signal env vars, and tags the episode with its
         budget so runs group and pivot by it. What was actually spent comes
         back as ``used_*`` columns.
         """

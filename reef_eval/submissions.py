@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from tide.types import TracePoint
+from reef_eval.types import TracePoint
 
 SUBMISSIONS_LOG = "submissions.jsonl"
 

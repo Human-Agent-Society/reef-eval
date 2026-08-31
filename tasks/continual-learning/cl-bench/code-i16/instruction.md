@@ -148,7 +148,7 @@ pass/fail: your changes to source files count, edits to the test files
 themselves are stripped before grading, and untracked new files are not
 part of the graded patch — modify tracked source files.
 
-Your persistent workspace is `$TIDE_STATE_DIR`: notes about this repo's
+Your persistent workspace is `$REEF_EVAL_STATE_DIR`: notes about this repo's
 layout, reliable test commands, and conventions carry to later issues
 (the same repository repeats), while the checkout itself is fresh.
 

@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from tide import Lab, LocalExecutor
-from tide.executors import _free_ports
-from tide.types import EpisodeSpec
+from reef_eval import Lab, LocalExecutor
+from reef_eval.executors import _free_ports
+from reef_eval.types import EpisodeSpec
 
 TEMPLATE = str(Path(__file__).parent.parent / "tasks" / "_template")
 
@@ -52,7 +52,7 @@ async def test_local_delivers_stream_state_dir(tmp_path):
     await lab.run(
         TEMPLATE,
         {
-            "command": 'echo remembered > "$TIDE_STATE_DIR/note"',
+            "command": 'echo remembered > "$REEF_EVAL_STATE_DIR/note"',
             "override_timeout_sec": 10,
         },
         state_dir=str(state),

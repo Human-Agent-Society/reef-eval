@@ -1,4 +1,4 @@
-# 🌊 tide
+# 🌊 reef-eval
 
 [![CI](https://github.com/Human-Agent-Society/reef-eval/actions/workflows/ci.yml/badge.svg)](https://github.com/Human-Agent-Society/reef-eval/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](pyproject.toml)
@@ -8,7 +8,7 @@
 
 An agent self-evolves when something it learned during a run persists
 past it: memory, a skill library, an evolved harness, updated weights.
-tide measures whether that state changes what the agent scores. It
+reef-eval measures whether that state changes what the agent scores. It
 supports two kinds of task.
 
 **Autoresearch** is the kind of task that approaches such as DeepMind's
@@ -40,13 +40,13 @@ any agent that can work inside a container, and you can test your own
 harness or method following
 [running agents](docs/running-agents.md).
 
-## Using tide
+## Using reef-eval
 
 First run? **[docs/get-started.md](docs/get-started.md)** walks from
 install to running and scoring a task.
 **[docs/running-agents.md](docs/running-agents.md)** explains how to set
 up a real agent, whether it is a common coding agent or your own. The
-rest of the docs are outlined in **[docs/](docs/README.md)**. tide
+rest of the docs are outlined in **[docs/](docs/README.md)**. reef-eval
 provides both a CLI and a Python API, with example code for each below.
 
 ### Run
@@ -54,10 +54,10 @@ provides both a CLI and a Python API, with example code for each below.
 ```bash
 pip install "reef-eval[harbor]"    # or from a source checkout: pip install -e ".[harbor]"
 
-tide list                          # what's runnable
-tide fetch cl-bench                # download a benchmark's tasks (a source checkout has them all already)
-tide run frontier-cs/frontier-cs-2-0-vllm-llm-serving-optimization --agent claude-code --model anthropic/claude-opus-5 --budget 2h
-tide stream cl-bench --agent claude-code --model anthropic/claude-opus-5
+reef-eval list                          # what's runnable
+reef-eval fetch cl-bench                # download a benchmark's tasks (a source checkout has them all already)
+reef-eval run frontier-cs/frontier-cs-2-0-vllm-llm-serving-optimization --agent claude-code --model anthropic/claude-opus-5 --budget 2h
+reef-eval stream cl-bench --agent claude-code --model anthropic/claude-opus-5
 ```
 
 `--budget` is time (`2h` / `30m` / `90s`; a bare number is hours); the other
@@ -71,7 +71,7 @@ needs a judge and so applies to autoresearch tasks. See
 command against it, with no containers involved:
 
 ```bash
-tide run autoresearch/first-party/circle-packing --local \
+reef-eval run autoresearch/first-party/circle-packing --local \
   --command "python examples/random_search.py" --budget 30s
 ```
 
@@ -80,7 +80,7 @@ never trusted results. Use local runs while developing and report the
 numbers from container runs; the details are in
 [get started](docs/get-started.md#no-docker-local-and-fake-runs).
 
-With Docker, you can run `tide run cl-bench/bsm-s01 --agent oracle` to
+With Docker, you can run `reef-eval run cl-bench/bsm-s01 --agent oracle` to
 check the install. The run builds the task image and executes the task's
 reference solution in the container, using Harbor's built-in `oracle`
 agent, and the score should be exactly 1.0.
@@ -92,7 +92,7 @@ trial), and `df` returns everything recorded so far as a pandas DataFrame:
 
 ```python
 # Lab is asyncio-based: run this inside an async function or a notebook.
-from tide import Lab, Budget, metrics
+from reef_eval import Lab, Budget, metrics
 
 lab = Lab("runs/exp1")
 row = await lab.run(
@@ -114,11 +114,11 @@ Re-running any script resumes it. Reference:
 ### Task streams
 
 A `Stream` runs an ordered task list under one agent. Every task's
-container mounts the same state directory (`$TIDE_STATE_DIR`), carrying
+container mounts the same state directory (`$REEF_EVAL_STATE_DIR`), carrying
 the agent's memory, skill library, or evolved harness from task to task:
 
 ```python
-from tide import Lab, Stream, metrics, tasks
+from reef_eval import Lab, Stream, metrics, tasks
 
 lab = Lab("runs/cl")
 stream = Stream(
@@ -147,7 +147,7 @@ name that downloads on first use) and returns the task references in the
 CLI's order:
 
 ```python
-tasks("cl-bench")  # every cl-bench task, the list `tide stream cl-bench` runs
+tasks("cl-bench")  # every cl-bench task, the list `reef-eval stream cl-bench` runs
 Stream("cl-bench", tasks("cl-bench"))  # run all of them in that order
 
 order = tasks("cl-bench")  # an ordinary list: print it, filter it, reorder it
@@ -201,9 +201,9 @@ as baselines. What each shows: [`examples/`](examples/README.md).
 
 | Benchmark | Tasks | Upstream | Run |
 |---|---|---|---|
-| [first-party](tasks/autoresearch/first-party) | 6 | this repo | `tide run autoresearch/first-party --agent <a>` |
-| [EdgeBench](tasks/autoresearch/edgebench) | 51 · 2-12 h budgets | [ByteDance-Seed/EdgeBench](https://github.com/ByteDance-Seed/EdgeBench) | `tide run edgebench/<task> --budget <h>` |
-| [FrontierCS](tasks/autoresearch/frontier-cs) | 208 · 188 algorithmic + 20 research, incl. 4 GPU kernel | [FrontierCS/Frontier-CS](https://github.com/FrontierCS/Frontier-CS) | `tide run frontier-cs/<task> --agent <a>` |
+| [first-party](tasks/autoresearch/first-party) | 6 | this repo | `reef-eval run autoresearch/first-party --agent <a>` |
+| [EdgeBench](tasks/autoresearch/edgebench) | 51 · 2-12 h budgets | [ByteDance-Seed/EdgeBench](https://github.com/ByteDance-Seed/EdgeBench) | `reef-eval run edgebench/<task> --budget <h>` |
+| [FrontierCS](tasks/autoresearch/frontier-cs) | 208 · 188 algorithmic + 20 research, incl. 4 GPU kernel | [FrontierCS/Frontier-CS](https://github.com/FrontierCS/Frontier-CS) | `reef-eval run frontier-cs/<task> --agent <a>` |
 
 Each first-party task covers one hard part of the category (held-out
 grading, safely grading agent-shipped code, ...); the
@@ -218,9 +218,9 @@ license, so its tasks are fetched onto your machine instead:
 
 | Benchmark | Tasks | Upstream | Run |
 |---|---|---|---|
-| [terminal-bench](tasks/continual-learning/terminal-bench) | 89 · **v2.0 only** (1.x unsupported) · committed | [terminal-bench-2](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) | `tide stream terminal-bench --agent <a>` |
-| [SWE-bench Verified](tasks/continual-learning/swebench-verified) | 500 · fetched (upstream has no license) | [harbor-datasets](https://github.com/laude-institute/harbor-datasets) | `tide fetch swebench-verified --limit 50`, then `tide stream swebench-verified --agent <a>` |
-| [CL-Bench](tasks/continual-learning/cl-bench) | 301 · **all 6 domains** · committed | [continual-learning-bench](https://github.com/pgasawa/continual-learning-bench) (Apache-2.0) | `tide stream cl-bench --agent <a>` |
+| [terminal-bench](tasks/continual-learning/terminal-bench) | 89 · **v2.0 only** (1.x unsupported) · committed | [terminal-bench-2](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) | `reef-eval stream terminal-bench --agent <a>` |
+| [SWE-bench Verified](tasks/continual-learning/swebench-verified) | 500 · fetched (upstream has no license) | [harbor-datasets](https://github.com/laude-institute/harbor-datasets) | `reef-eval fetch swebench-verified --limit 50`, then `reef-eval stream swebench-verified --agent <a>` |
+| [CL-Bench](tasks/continual-learning/cl-bench) | 301 · **all 6 domains** · committed | [continual-learning-bench](https://github.com/pgasawa/continual-learning-bench) (Apache-2.0) | `reef-eval stream cl-bench --agent <a>` |
 
 Of the benchmarks [AgentStream](https://arxiv.org/abs/2608.00155) builds
 its streams from, SWE-bench Verified is the hardest one with a published
@@ -250,18 +250,18 @@ Guide: **[docs/authoring-tasks.md](docs/authoring-tasks.md)**.
 
 ## Why not plain Harbor?
 
-tide is built on Harbor. Harbor provides the runtime: the task format,
+reef-eval is built on Harbor. Harbor provides the runtime: the task format,
 containers, agent adapters, the verifier, trajectories, `harbor job
-resume`, and `harbor view`. tide builds on top of them and adds three features
+resume`, and `harbor view`. reef-eval builds on top of them and adds three features
 specifically designed for evaluating agents that learn during the run.
 
-| What tide adds | In code | Where |
+| What reef-eval adds | In code | Where |
 |---|---|---|
 | **A judge.** The agent can submit at any time, and the judge (instantiated in a separate container) scores and timestamps each submission. | `POST $JUDGE_URL/submit`<br>`-> {"score": 0.83, "best": 0.91, "remaining": 47}` | [`judge_server.py`](tasks/_template/environment/judge_server.py) |
-| **Streams.** An ordered task list run and solved by one agent. tide snapshots the agent state after each episode and transfers it to the next. | `await Stream("wk1", tasks).run(lab, agent)` | [`stream.py`](tide/stream.py), [streams](docs/get-started.md#streams) |
-| **One table for all results.** It stores every run, keyed by (task, agent, tags). tide provides various budget types for the agent runs, and provides common metrics for measuring self-evolving agents. | `metrics.auc(metrics.anytime(lab.df("trace")))` | [`store.py`](tide/store.py), [`budget.py`](tide/budget.py), [metrics](docs/metrics.md) |
+| **Streams.** An ordered task list run and solved by one agent. reef-eval snapshots the agent state after each episode and transfers it to the next. | `await Stream("wk1", tasks).run(lab, agent)` | [`stream.py`](reef_eval/stream.py), [streams](docs/get-started.md#streams) |
+| **One table for all results.** It stores every run, keyed by (task, agent, tags). reef-eval provides various budget types for the agent runs, and provides common metrics for measuring self-evolving agents. | `metrics.auc(metrics.anytime(lab.df("trace")))` | [`store.py`](reef_eval/store.py), [`budget.py`](reef_eval/budget.py), [metrics](docs/metrics.md) |
 
-Full design (how tide prevents reward hacking, task conventions, data
+Full design (how reef-eval prevents reward hacking, task conventions, data
 model, extensibility): **[docs/design.md](docs/design.md)**.
 
 ## Contributing

@@ -7,7 +7,7 @@ The first two run with zero setup; the rest need Docker and
 |---|---|---|
 | [`quickstart.py`](quickstart.py) | the Lab API: episodes, resume, the results table (agents are simulated) | nothing |
 | [`stream_quickstart.py`](stream_quickstart.py) | a stream: carried state, the learning curve, resume | nothing |
-| [`random_search.py`](random_search.py) | the judge protocol from the method's side, in ~20 lines: submit, read the score, stop at the budget | a running judge (`tide run ... --local`) |
+| [`random_search.py`](random_search.py) | the judge protocol from the method's side, in ~20 lines: submit, read the score, stop at the budget | a running judge (`reef-eval run ... --local`) |
 | [`minimal_harness.py`](minimal_harness.py) | the smallest complete harness: a ~25-line `BaseAgent` that puts `random_search.py` in the container and runs it | Docker |
 | [`llm_harness.py`](llm_harness.py) | the autoresearch loop with a model in it: propose, submit, and put the judge's score into the next prompt | Docker + an API key |
 

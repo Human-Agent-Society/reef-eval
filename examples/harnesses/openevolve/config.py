@@ -23,7 +23,7 @@ def openevolve_config(model: str, api_base: str | None = None) -> dict[str, Any]
         "prompt": {
             "system_message": (
                 "Improve the program's circle packing. Preserve its JSON output "
-                "contract; the evaluator returns the tide judge's score."
+                "contract; the evaluator returns the reef-eval judge's score."
             )
         },
         "database": {

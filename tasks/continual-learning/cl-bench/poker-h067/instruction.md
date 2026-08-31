@@ -11,7 +11,7 @@ Hand 67/120 of heads-up Texas Hold'em against
 **Adam** (1000-chip stacks, blinds 5/10, stacks reset
 every hand). The opponents are deterministic characters with stable,
 exploitable patterns; what you learned about Adam in
-earlier hands is in your memory (`$TIDE_STATE_DIR`) — use it, and after
+earlier hands is in your memory (`$REEF_EVAL_STATE_DIR`) — use it, and after
 the hand, record what the outcome (and any showdown reveal) taught you.
 
 The table is a service — you never see the deck. Get the current decision

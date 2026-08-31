@@ -18,7 +18,7 @@ def _usage_value(value: Any, name: str) -> int:
 
 
 def _record_usage(response: Any, fallback_model: str) -> None:
-    path = os.environ.get("TIDE_USAGE_FILE")
+    path = os.environ.get("REEF_EVAL_USAGE_FILE")
     usage = getattr(response, "usage", None)
     if not path or usage is None:
         return
@@ -51,7 +51,7 @@ async def _metered_call_api(self: OpenAILLM, params: dict[str, Any]) -> str:
 
 def install_usage_tracking() -> None:
     """Instrument OpenEvolve's model call before its CLI starts."""
-    if getattr(OpenAILLM, "_tide_usage_patch", False):
+    if getattr(OpenAILLM, "_reef_eval_usage_patch", False):
         return
     OpenAILLM._call_api = _metered_call_api
-    OpenAILLM._tide_usage_patch = True
+    OpenAILLM._reef_eval_usage_patch = True

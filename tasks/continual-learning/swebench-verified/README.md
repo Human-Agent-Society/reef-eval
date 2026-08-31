@@ -17,9 +17,9 @@ machine from the exact commit the Harbor registry pins as v1.0; a blob
 filter keeps subset fetches small:
 
 ```bash
-tide fetch swebench-verified --limit 50   # or task names, or all 500
-tide stream swebench-verified --agent claude-code --model anthropic/claude-opus-5
+reef-eval fetch swebench-verified --limit 50   # or task names, or all 500
+reef-eval stream swebench-verified --agent claude-code --model anthropic/claude-opus-5
 ```
 
 The isolated baseline for `metrics.transfer` is a plain
-`tide run swebench-verified/<task> --agent <a>` over the same tasks.
+`reef-eval run swebench-verified/<task> --agent <a>` over the same tasks.

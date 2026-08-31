@@ -1,6 +1,6 @@
-# Contributing to tide
+# Contributing to reef-eval
 
-tide stays small, so contributions are reviewed against a short list of
+reef-eval stays small, so contributions are reviewed against a short list of
 design rules more than against style.
 
 ## The rules PRs are reviewed against
@@ -9,7 +9,7 @@ design rules more than against style.
    don't change; columns may be added, never renamed or retyped. If your
    change needs to break this, open an issue first: it means the design is
    wrong somewhere, and that is the thing to fix.
-2. **Tasks stay stock Harbor.** No tide-specific fields in `task.toml`,
+2. **Tasks stay stock Harbor.** No reef-eval-specific fields in `task.toml`,
    ever. Benchmark structure lives in scripts *around* tasks.
    `tests/test_task_suite.py` validates every committed `task.toml`
    under Harbor's `TaskConfig`.
@@ -17,7 +17,7 @@ design rules more than against style.
    shape has appeared in at least two real scripts. Until then it lives in
    `examples/`.
 4. **Dependency direction.** Catalog conversion scripts depend on published
-   formats, never tide's runtime internals. Metrics import pandas, never tide.
+   formats, never reef-eval's runtime internals. Metrics import pandas, never reef_eval.
 5. **Anti-reward-hacking measures are tested.** Anything claiming to stop
    an agent from gaming the score needs a test that actually cheats and
    fails. The
@@ -30,9 +30,9 @@ design rules more than against style.
 7. **Unbuilt work lives in the roadmap.** Docs state what exists; where a
    gap must be mentioned, link the [roadmap issue](https://github.com/Human-Agent-Society/reef-eval/issues/19)
    instead of writing "not built yet" in place.
-8. **The name is tide, lowercase.** Plain text in prose, including at the
-   start of a sentence. Code font is for what you type: the `tide`
-   command, the `reef-eval` package, `from tide import Lab`.
+8. **The name is reef-eval, lowercase.** Plain text in prose, including at the
+   start of a sentence. Code font is for what you type: the `reef-eval`
+   command, the `reef-eval` package, `from reef_eval import Lab`.
 
 ## What's welcome
 

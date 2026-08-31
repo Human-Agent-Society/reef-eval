@@ -1,6 +1,6 @@
 # Get started
 
-This page goes from installing tide to a real score, in both task
+This page goes from installing reef-eval to a real score, in both task
 regimes. For the ideas behind the pipeline see [design](design.md); for
 evaluating your own agent see [running agents](running-agents.md).
 
@@ -26,8 +26,8 @@ no credentials and no internet, so a failure there points at the setup
 rather than at the agent. Start there:
 
 ```bash
-tide list                                 # what's runnable
-tide run cl-bench/bsm-s01 --agent oracle  # should score exactly 1.0
+reef-eval list                                 # what's runnable
+reef-eval run cl-bench/bsm-s01 --agent oracle  # should score exactly 1.0
 ```
 
 Then a real agent. Its CLI runs inside the container, so it needs
@@ -35,7 +35,7 @@ credentials there and its hosts added to the allowlist; see
 [running agents](running-agents.md):
 
 ```bash
-tide run frontier-cs/frontier-cs-algorithm-1 --agent claude-code --model anthropic/claude-opus-5 --budget 2h
+reef-eval run frontier-cs/frontier-cs-algorithm-1 --agent claude-code --model anthropic/claude-opus-5 --budget 2h
 ```
 
 ## Budgets
@@ -49,14 +49,14 @@ the rest unset:
 | evals | `--max-evals` | `max_submissions` (the flag and the field differ) | hard at the task's own ceiling (the judge returns 429 past it); a lower per-run cap is signalled |
 | tokens | `--max-tokens` (`500k`, `2m`) | `max_tokens` | soft: signalled, actual spend recorded |
 
-Each axis reaches the container as a `TIDE_*` environment variable and is
+Each axis reaches the container as a `REEF_EVAL_*` environment variable and is
 tagged on the episode (`budget`, `budget_max_tokens`, ...) so runs group
 by it. Actual spend comes back as `used_*` columns: submission counts
 from the judge's log and tokens from the harness's usage report.
 
 The eval axis needs a judge, so it applies to autoresearch tasks. A
 stream task is graded by its verifier after the episode and has nothing
-to submit to, so `--max-evals` does nothing there and tide warns when a
+to submit to, so `--max-evals` does nothing there and reef-eval warns when a
 run sets it on such a task. Time and tokens work in both regimes. In a
 stream the budget applies to each task on its own, and it is part of the
 stream's identity: run the same tasks under a different budget and you
@@ -70,20 +70,20 @@ sidecar, so they hold whatever you pass on the command line.
 
 A stream is an ordered task list under one agent, with a state directory
 carried between tasks and mounted into every container as
-`$TIDE_STATE_DIR`. tide never reads its contents. The scores show
+`$REEF_EVAL_STATE_DIR`. reef-eval never reads its contents. The scores show
 whether carrying it helped.
 
 ```bash
-tide stream cl-bench --agent claude-code --model anthropic/claude-opus-5
-tide stream terminal-bench cl-bench --shuffle 1 --agent claude-code --model anthropic/claude-opus-5
+reef-eval stream cl-bench --agent claude-code --model anthropic/claude-opus-5
+reef-eval stream terminal-bench cl-bench --shuffle 1 --agent claude-code --model anthropic/claude-opus-5
 ```
 
-Targets come first, exactly as in `tide run`, and they decide the order.
+Targets come first, exactly as in `reef-eval run`, and they decide the order.
 A benchmark expands to every task inside it sorted by path, and several
-targets run in the order you typed them. `tide stream cl-bench` runs
+targets run in the order you typed them. `reef-eval stream cl-bench` runs
 `bsm-s01`, `bsm-s02`, ... then `code-i01`, `cohort-...`, `dbx-q01`, and
 so on: domain by domain, and inside a domain the upstream sequence,
-because the converted names are zero-padded. `tide stream terminal-bench
+because the converted names are zero-padded. `reef-eval stream terminal-bench
 cl-bench` runs all of terminal-bench and then all of cl-bench.
 
 `tasks("cl-bench")` returns that same list in Python, so filtering,
@@ -99,7 +99,7 @@ task list is automatically a separate stream with its own state. `--name`
 labels the stream (it becomes the `stream` tag and the state directory);
 without it the label is derived from the targets. Pass a new `--name` to
 run the same tasks again from empty memory, the way `--tag attempt=2`
-gives `tide run` a fresh attempt.
+gives `reef-eval run` a fresh attempt.
 
 Around each task, the live state directory is reset from the previous
 snapshot before the run and snapshotted after, so a crashed stream picks
@@ -123,7 +123,7 @@ episode (one Harbor trial); `df` returns everything recorded so far as a
 pandas DataFrame:
 
 ```python
-from tide import Budget, Lab, Stream, metrics, tasks
+from reef_eval import Budget, Lab, Stream, metrics, tasks
 
 lab = Lab("runs/exp1")
 row = await lab.run(  # asyncio: inside an async function or a notebook
@@ -146,7 +146,7 @@ df.groupby(["model", "task"])["reward"].mean()
 tasks, a benchmark name (downloaded on first use), or a Harbor registry id,
 which passes through as-is. It returns the references as a list of strings
 in the CLI's order, so
-`tasks("cl-bench")` is the list `tide stream cl-bench` runs, and printing it
+`tasks("cl-bench")` is the list `reef-eval stream cl-bench` runs, and printing it
 is how you see what a target covers:
 
 ```python
@@ -159,7 +159,7 @@ Stream("poker-only", [t for t in order if "poker" in t])  # a filter
 Stream("revisit", [*order[:10], order[0]])  # a repeat, which measures forgetting
 ```
 
-This is where the Python API goes past the CLI. `tide stream` runs the
+This is where the Python API goes past the CLI. `reef-eval stream` runs the
 resolved list as it comes, with `--shuffle SEED` for a deterministic
 reshuffle and nothing else; `Stream` runs exactly the list it is given, so
 any other order, subset, or repetition is yours to build. The list is part
@@ -179,7 +179,7 @@ too. The keys live in the results table inside the lab directory: when
 that table already has a row for the key, `run` returns the stored row
 and executes nothing, and otherwise the episode runs.
 
-Re-running the same script or the same `tide stream` command therefore
+Re-running the same script or the same `reef-eval stream` command therefore
 picks up where it left off, and no daemon or job file has to remember
 anything between runs.
 
@@ -206,7 +206,7 @@ a run stitched from checkpoints is not comparable to a clean budget.
 command against it:
 
 ```bash
-tide run autoresearch/first-party/circle-packing --local \
+reef-eval run autoresearch/first-party/circle-packing --local \
   --command "python examples/random_search.py" --budget 30s
 ```
 
@@ -231,7 +231,7 @@ runs/cli/
     └── result.json, config.json, trial.log
 ```
 
-`tide report` summarizes the store; every row's `uri` points back at its
+`reef-eval report` summarizes the store; every row's `uri` points back at its
 trial directory, so any number can be traced to the files behind it.
 
 ## Troubleshooting

@@ -6,15 +6,15 @@ from typing import Any
 
 from harbor.agents.installed.codex import Codex
 
-from examples.harnesses.base import TideHarnessBase
+from examples.harnesses.base import ReefEvalHarnessBase
 
 CODEX_VERSION = "0.147.0"
 
 
-class CodexHarness(TideHarnessBase, Codex):
+class CodexHarness(ReefEvalHarnessBase, Codex):
     """Use Harbor's standard non-interactive Codex agent at a fixed version.
 
-    ``TideHarnessBase`` comes first so the SOP's ``run`` template wins over
+    ``ReefEvalHarnessBase`` comes first so the SOP's ``run`` template wins over
     ``Codex.run``; the ``_launch`` phase then delegates to Harbor's own
     non-interactive agent. Installation, auth, and trajectory-based usage
     collection are all Harbor's, so ``_collect_usage`` needs nothing

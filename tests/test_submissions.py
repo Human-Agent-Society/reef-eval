@@ -1,6 +1,6 @@
 """Submission-log parsing: the judge's history becomes trace points."""
 
-from tide.submissions import (
+from reef_eval.submissions import (
     AGENT_WRITABLE,
     SUBMISSIONS_LOG,
     find_submissions_log,

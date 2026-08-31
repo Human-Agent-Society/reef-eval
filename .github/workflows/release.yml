@@ -23,7 +23,7 @@ jobs:
         run: |
           uv venv smoke --python 3.12
           uv pip install --python smoke/bin/python dist/*.whl
-          smoke/bin/tide --version
-          smoke/bin/python -c "import tide; print(tide.__version__)"
+          smoke/bin/reef-eval --version
+          smoke/bin/python -c "import reef_eval; print(reef_eval.__version__)"
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1

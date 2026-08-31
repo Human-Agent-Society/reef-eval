@@ -1,13 +1,13 @@
 # Metrics
 
-`tide/metrics.py`: pure functions, `DataFrame in → DataFrame/Series out`.
-They import pandas and **nothing from tide**, so they work on any exported
+`reef_eval/metrics.py`: pure functions, `DataFrame in → DataFrame/Series out`.
+They import pandas and **nothing from reef-eval**, so they work on any exported
 results table, including one you didn't produce.
 
 ## Use them
 
 ```python
-from tide import Lab, metrics
+from reef_eval import Lab, metrics
 
 lab = Lab("runs/exp1")
 ep, trace = lab.df("episode"), lab.df("trace")

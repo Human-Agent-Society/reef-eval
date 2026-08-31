@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from tide import metrics
+from reef_eval import metrics
 
 
 def test_anytime_best_so_far_and_groups():

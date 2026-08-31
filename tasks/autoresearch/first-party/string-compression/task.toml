@@ -4,7 +4,7 @@ schema_version = "1.4"
 artifacts = []
 
 [task]
-name = "tide/string-compression"
+name = "reef-eval/string-compression"
 description = "Compress a fixed corpus: ship a decompressor + payload; reward = corpus bytes / (decompressor + payload bytes), exact round-trip required."
 
 [metadata]

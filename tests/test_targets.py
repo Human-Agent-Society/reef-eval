@@ -1,10 +1,10 @@
-"""tide.tasks: the CLI's target resolution, available to scripts."""
+"""reef_eval.tasks: the CLI's target resolution, available to scripts."""
 
 from pathlib import Path
 
 import pytest
 
-from tide import tasks
+from reef_eval import tasks
 
 TASKS_ROOT = Path(__file__).parent.parent / "tasks"
 
@@ -23,7 +23,7 @@ def test_a_benchmark_name_gives_every_task_in_it():
 
 def test_the_bare_benchmark_name_works_too():
     """Benchmarks sit one level down, so `tasks("cl-bench")` resolves the
-    same way `tide stream cl-bench` does."""
+    same way `reef-eval stream cl-bench` does."""
     assert tasks("first-party", tasks_dir=TASKS_ROOT) == tasks(
         "autoresearch/first-party", tasks_dir=TASKS_ROOT
     )

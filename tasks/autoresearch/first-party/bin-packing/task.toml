@@ -4,7 +4,7 @@ schema_version = "1.4"
 artifacts = []
 
 [task]
-name = "tide/bin-packing"
+name = "reef-eval/bin-packing"
 description = "Pack 60 items into as few capacity-100 bins as possible. Reward = first-fit bins / your bins."
 
 [metadata]
