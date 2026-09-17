@@ -11,10 +11,10 @@ AgentCL is CC-BY-NC-4.0 and this repo is Apache-2.0, so no converted
 task is committed here; this script builds them on your machine, the way
 SWE-bench Verified's fetch.py does for its own licensing reason.
 
-Every download is content-pinned: each source file must hash to its
-entry in ``DIGESTS``, so an upstream re-cut stops the run instead of
-quietly changing what the benchmark measures. Pass ``--revision <sha>``
-to pin the dataset commit as well.
+Downloads are pinned twice over: at the dataset commit below, and at
+each source file's sha256 in ``DIGESTS``. Either check failing stops the
+run instead of quietly changing what the benchmark measures. Pass
+``--revision`` to read a different commit.
 
 BrowseComp+ needs its corpus, which is published apart from AgentCL and
 is not redistributable here: pass ``--corpus`` a JSONL or TSV of
@@ -37,8 +37,9 @@ CACHE = HERE / ".data"
 CORPUS_INDEX = CACHE / "browsecomp_corpus.sqlite"
 
 REPO = "osunlp/AgentCL"
-# The dataset publishes no tags, so "main" plus the digests below are the pin.
-DEFAULT_REVISION = "main"
+# The dataset publishes no tags, so the pin is a commit: HEAD of main when
+# these digests were taken. Bump the two together or not at all.
+DEFAULT_REVISION = "e85c86e1c30f9f6cd24d780bd8cc4764b750a92f"
 
 DIGESTS = {
     "mmlu_pro/test_300.json": "bcfca99dece36ad04b8f113f8feb75a672b096275889194a5a039b4a4a93b2ee",
@@ -108,8 +109,8 @@ def source(rel_path: str, revision: str) -> Path:
         raise SystemExit(
             f"{rel_path} integrity check failed: sha256 {digest[:16]}... does not "
             f"match the declared {DIGESTS[rel_path][:16]}.... Upstream may have "
-            f"re-cut the file; delete {CACHE} and re-run with --revision <sha> to "
-            "pin the commit these tasks were built from."
+            f"re-cut the file; delete {CACHE} and re-run. If the digests are "
+            "the ones that moved, --revision reads an older commit."
         )
     return path
 

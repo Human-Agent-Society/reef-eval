@@ -103,10 +103,10 @@ stops: it proves the pipeline, not a ceiling, and `task.toml` says so in
 
 ## The pins
 
-Every source file is content-pinned: `fetch.py` checks each sha256 and
-stops if upstream re-cuts one, since that is a different benchmark
-rather than a newer one. The dataset publishes no tags, so
-`--revision <sha>` is there to pin the commit as well. Conversion is
+The dataset publishes no tags, so `fetch.py` pins a commit
+(`e85c86e1`) and, independently, the sha256 of every source file it
+reads. Either check failing stops the run, since a re-cut source is a
+different benchmark rather than a newer one. Conversion is
 deterministic: the same sources always produce the same tasks, and
 `--limit` yields a byte-identical prefix of the full conversion.
 
