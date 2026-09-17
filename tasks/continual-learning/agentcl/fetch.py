@@ -63,6 +63,14 @@ DIGESTS = {
 #: source, not a smaller benchmark, so conversion stops.
 EXPECTED = {
     "mmlu": 100,  # per domain
+    "codeeval": {
+        ("humaneval", "naive"): 120,
+        ("humaneval", "comp"): 240,
+        ("mbpp", "naive"): 368,
+        ("mbpp", "comp"): 736,
+        ("bigcodebench", "naive"): 48,
+        ("bigcodebench", "comp"): 96,
+    },
     "babyai": {"naive": 40, "comp": 56},
     "scienceworld": {"naive": 90, "block": 90},
     "browsecomp": {"naive": 100, "comp": 408},
@@ -138,6 +146,12 @@ def fetch_codeeval(args) -> int:
     for dataset in convert.DATASETS:
         for stream in convert.STREAMS:
             rows = _codeeval_rows(convert, dataset, stream, args.revision)
+            expected = EXPECTED["codeeval"][dataset, stream]
+            if args.limit is None and len(rows) != expected:
+                raise SystemExit(
+                    f"expected {expected} {dataset} {stream} problems, "
+                    f"found {len(rows)}"
+                )
             tasks = convert.convert_stream(
                 rows, HERE, dataset=dataset, stream=stream, limit=args.limit
             )
@@ -384,12 +398,14 @@ def main() -> None:
     written = 0
     for name in subsets:
         written += FETCHERS[name](args)
-    if "browsecomp" not in subsets:
+    if not args.subsets and "browsecomp" not in subsets:
         print("skipped browsecomp: it needs --corpus (see this folder's README)")
     print(f"wrote {written} AgentCL task(s) -> {HERE}")
+    built = sorted(path.parent.name for path in HERE.glob("*/task.toml"))
+    stream = built[0].rsplit("-", 1)[0] if built else "mmlu-economics"
     print(
         "stream one of them: reef-eval stream "
-        "tasks/continual-learning/agentcl/mmlu-economics-* --agent <a>"
+        f"tasks/continual-learning/agentcl/{stream}-* --agent <a>"
     )
 
 
