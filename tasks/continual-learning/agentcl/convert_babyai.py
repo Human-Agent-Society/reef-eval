@@ -9,6 +9,11 @@ The grid, the subgoals and the score live in the judge sidecar; the
 agent sends actions over HTTP and never sees what it is being scored
 against. Reward is progress -- the fraction of the episode's subgoals
 reached -- which is AgentCL's PR.
+
+AgentCL publishes each episode's opening observation but not the seed
+that produces it, so the seed manifest ships beside this file (see
+``SEEDS``). It is checked rather than trusted: the judge rebuilds the
+room at startup and refuses to serve if the observation differs.
 """
 
 import json
@@ -19,6 +24,14 @@ import sidecar
 
 #: The released files, and the name each stream's tasks take.
 STREAMS = {"naive": "naive", "comp": "compositional"}
+
+#: Episode id -> BabyAI seed, for the 76 episodes the two streams draw
+#: on. Not part of the dataset: AgentCL ships the opening observation a
+#: seed has to reproduce, and this manifest is the one the AgentCL
+#: harness this conversion follows runs with. Nothing here is taken on
+#: faith -- ``babyai_server`` re-derives the observation and stops on a
+#: mismatch, so a wrong seed fails loudly instead of grading another room.
+SEEDS = Path(__file__).parent / "babyai_seeds.json"
 
 #: AgentGym's BabyAI environment, pinned to the commit AgentCL's servers
 #: were built against. It pulls gym/gymnasium/minigrid with it.

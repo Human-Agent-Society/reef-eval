@@ -55,7 +55,6 @@ DIGESTS = {
     "browsecomp_plus/qrel_evidence.txt": "3177494e64e6d8fe1b5d09cbc3d62a1230d1ea4275e101097164d00389966ec1",
     "agentboard_babyai/naive.jsonl": "dc923a597113b8aa569091b870d46d537abc5c3d07b8cb34486a20c763369e10",
     "agentboard_babyai/compositional.jsonl": "37f4dc7c6c98570de5d6d0cb37e179b49196a28e50d63c23839daddf9a5a7010",
-    "agentboard_babyai/seeds.json": "bfb170be936c3ce1b2f0bd2e4f8bad128e234e122cdb55c50ee3314ae3343a8b",
     "agentboard_scienceworld/naive.jsonl": "ed58212de963cd3c3479e87a25c5d91e2d2decd4bbc3a39bb75283892d186ce1",
     "agentboard_scienceworld/block.jsonl": "fc7ad7c614782b7d1ec6fcb409149a66caa864f030500a80a0cdd57626d3b269",
 }
@@ -234,7 +233,8 @@ def _run_reference(prefix: str, test_code: str, completion: str) -> tuple[bool, 
 def fetch_babyai(args) -> int:
     """AgentBoard BabyAI: the naive and compositional episode streams."""
     convert = _module("convert_babyai")
-    seeds = convert.load_seeds(source("agentboard_babyai/seeds.json", args.revision))
+    # The seed manifest is not in the dataset; it ships with the converter.
+    seeds = convert.load_seeds(convert.SEEDS)
     written = 0
     for stream, released in convert.STREAMS.items():
         rows = convert.load_stream(

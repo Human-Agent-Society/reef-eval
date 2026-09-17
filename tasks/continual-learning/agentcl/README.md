@@ -110,6 +110,14 @@ different benchmark rather than a newer one. Conversion is
 deterministic: the same sources always produce the same tasks, and
 `--limit` yields a byte-identical prefix of the full conversion.
 
+One input is not upstream's. AgentCL publishes each BabyAI episode's
+opening observation but not the seed that reproduces it, so
+[`babyai_seeds.json`](babyai_seeds.json) — 76 episode ids and their
+seeds, carried over from the AgentCL harness this conversion follows —
+ships here instead. It is checked, not trusted: the judge rebuilds the
+room at startup and refuses to serve if the observation differs, so a
+wrong seed stops the trial rather than grading a different room.
+
 The judge images pin what they can. BabyAI's environment comes from
 [AgentGym](https://github.com/WooooDyy/AgentGym) at the commit AgentCL's
 own servers were built against. ScienceWorld's wrapper is not versioned

@@ -922,3 +922,17 @@ def test_a_judge_that_breaks_says_so_instead_of_hanging(judge_server):
 def test_the_judge_rejects_a_body_that_is_not_an_object(judge_server):
     status, payload = judge_server("POST", "/echo", ["not", "an", "object"])
     assert status == 400 and "JSON object" in payload["error"]
+
+
+def test_the_babyai_seed_manifest_ships_with_the_converter():
+    """AgentCL publishes the opening observation, not the seed behind it.
+
+    The manifest is ours, so it is checked here for shape and coverage —
+    and at run time by the judge, which rebuilds the room and refuses to
+    serve if the observation is not the published one.
+    """
+    seeds = babyai.load_seeds(babyai.SEEDS)
+    assert len(seeds) == 76  # the episodes the two streams draw on
+    assert all(isinstance(key, int) and value >= 0 for key, value in seeds.items())
+    for row in BABYAI_ROWS:
+        assert int(row["id"]) in seeds
