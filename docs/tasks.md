@@ -18,7 +18,7 @@ harbor trial start -p tasks/continual-learning/cl-bench/bsm-s01 # stock Harbor
 | [terminal-bench](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/continual-learning/terminal-bench) | stream | 89 | `reef-eval stream terminal-bench --agent <a>` |
 | [CL-Bench](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/continual-learning/cl-bench) | stream | 301 | `reef-eval stream cl-bench --agent <a>` |
 | [SWE-bench Verified](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/continual-learning/swebench-verified) | stream | 500 | `reef-eval fetch swebench-verified --limit 50` first |
-| [AgentCL](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/continual-learning/agentcl) | stream | 300 | `reef-eval fetch agentcl` first, then stream one domain |
+| [AgentCL](https://github.com/Human-Agent-Society/reef-eval/tree/main/tasks/continual-learning/agentcl) | stream | 2692 | `reef-eval fetch agentcl` first, then stream one domain |
 
 The first-party tasks each teach one hard part of autoresearch, and each
 benchmark states its upstream, license, and oracle scores in
