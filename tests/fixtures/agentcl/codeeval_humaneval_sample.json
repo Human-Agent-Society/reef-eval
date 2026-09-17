@@ -1,0 +1,26 @@
+[
+ {
+  "id": 91,
+  "problem": "# Given a list of strings, each representing a paragraph, count the total number of boredoms across all paragraphs. A boredom is defined as a sentence that starts with the word 'I'. Sentences are delimited by '.', '?' or '!'. For example, if the input list is ['The sky is blue. The sun is shining. I love this weather', 'I am happy. I am excited.'], the output should be 3.\n\ndef count_total_boredoms(paragraphs):\n",
+  "solution": "    total_boredoms = 0\n    for paragraph in paragraphs:\n        total_boredoms += is_bored(paragraph)\n    return total_boredoms\n\n",
+  "test_code": "\ndef is_bored(S):\n    \"\"\"\n    You'll be given a string of words, and your task is to count the number\n    of boredoms. A boredom is a sentence that starts with the word \"I\".\n    Sentences are delimited by '.', '?' or '!'.\n   \n    For example:\n    >>> is_bored(\"Hello world\")\n    0\n    >>> is_bored(\"The sky is blue. The sun is shining. I love this weather\")\n    1\n    \"\"\"\n\n    import re\n    sentences = re.split(r'[.?!]\\s*', S)\n    return sum(sentence[0:2] == 'I ' for sentence in sentences)\n\n\nassert count_total_boredoms(['The sky is blue. The sun is shining. I love this weather', 'I am happy. I am excited.']) == 3\nassert count_total_boredoms(['Hello world', 'This is a test.']) == 0\nassert count_total_boredoms(['I am bored. I need a break.', 'The weather is nice.']) == 2\nassert count_total_boredoms(['I am excited. I am ready.', 'I am tired.']) == 3\nassert count_total_boredoms(['This is a test. I am testing.']) == 1",
+  "category": "new",
+  "corresponding_raw_id": 91
+ },
+ {
+  "id": 0,
+  "problem": "# Given a list of lists of floats, determine if there exists any list where at least two numbers are closer to each other than a given threshold. If such a list exists, return the indices of the lists where this condition is met. If no such list exists, return an empty list.\ndef find_close_elements_lists(list_of_lists: List[List[float]], threshold: float) -> List[int]:\n",
+  "solution": "    \"\"\" Find the indices of lists where at least two numbers are closer to each other than the given threshold.\n    >>> find_close_elements_lists([[1.0, 2.0, 3.0], [1.0, 2.8, 3.0, 4.0, 5.0, 2.0]], 0.5)\n    [1]\n    >>> find_close_elements_lists([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], 0.3)\n    []\n    \"\"\"\n    return [i for i, lst in enumerate(list_of_lists) if has_close_elements(lst, threshold)]\n\n",
+  "test_code": "from typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \"\"\"\n\n    for idx, elem in enumerate(numbers):\n        for idx2, elem2 in enumerate(numbers):\n            if idx != idx2:\n                distance = abs(elem - elem2)\n                if distance < threshold:\n                    return True\n\n    return False\n\n\nassert find_close_elements_lists([[1.0, 2.0, 3.0], [1.0, 2.8, 3.0, 4.0, 5.0, 2.0]], 0.5) == [1]\nassert find_close_elements_lists([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], 0.3) == []\nassert find_close_elements_lists([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], 0.5) == []",
+  "category": "new",
+  "corresponding_raw_id": 0
+ },
+ {
+  "id": 46,
+  "problem": "# The Fib4 number sequence is a sequence similar to the Fibonacci sequence that's defined as follows:\n",
+  "solution": "# fib4(0) -> 0\n# fib4(1) -> 0\n# fib4(2) -> 2\n# fib4(3) -> 0\n# fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).\n\n# Given a list of integers, compute the sum of the Fib4 values for each integer in the list. If the list contains duplicate integers, compute the Fib4 value only once for each unique integer and then sum these values. Return the total sum as the result.\nfrom typing import List\ndef sum_fib4_values(lst: List[int]) -> int:\n    unique_numbers = set(lst)\n    total_sum = sum(fib4(n) for n in unique_numbers)\n    return total_sum\n\n",
+  "test_code": "\n\ndef fib4(n: int):\n    \"\"\"The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:\n    fib4(0) -> 0\n    fib4(1) -> 0\n    fib4(2) -> 2\n    fib4(3) -> 0\n    fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).\n    Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.\n    >>> fib4(5)\n    4\n    >>> fib4(6)\n    8\n    >>> fib4(7)\n    14\n    \"\"\"\n\n    results = [0, 0, 2, 0]\n    if n < 4:\n        return results[n]\n\n    for _ in range(4, n + 1):\n        results.append(results[-1] + results[-2] + results[-3] + results[-4])\n        results.pop(0)\n\n    return results[-1]\n\n\nassert sum_fib4_values([5, 6, 7]) == 26\nassert sum_fib4_values([0, 1, 2, 3]) == 2\nassert sum_fib4_values([5, 5, 6, 6, 7, 7]) == 26\nassert sum_fib4_values([10, 11, 12]) == 690\nassert sum_fib4_values([]) == 0",
+  "category": "new",
+  "corresponding_raw_id": 46
+ }
+]

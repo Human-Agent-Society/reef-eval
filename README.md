@@ -211,16 +211,18 @@ grading, safely grading agent-shipped code, ...); the
 
 ### Task streams
 
-Three stream benchmarks. terminal-bench and CL-Bench tasks are committed
+Four stream benchmarks. terminal-bench and CL-Bench tasks are committed
 to this repo (Apache-2.0) and run out of the box, with a pinned
 `fetch.py` to regenerate them; SWE-bench Verified's dataset repo has no
-license, so its tasks are fetched onto your machine instead:
+license and AgentCL is non-commercial, so those two are fetched onto
+your machine instead:
 
 | Benchmark | Tasks | Upstream | Run |
 |---|---|---|---|
 | [terminal-bench](tasks/continual-learning/terminal-bench) | 89 · **v2.0 only** (1.x unsupported) · committed | [terminal-bench-2](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) | `reef-eval stream terminal-bench --agent <a>` |
 | [SWE-bench Verified](tasks/continual-learning/swebench-verified) | 500 · fetched (upstream has no license) | [harbor-datasets](https://github.com/laude-institute/harbor-datasets) | `reef-eval fetch swebench-verified --limit 50`, then `reef-eval stream swebench-verified --agent <a>` |
 | [CL-Bench](tasks/continual-learning/cl-bench) | 301 · **all 6 domains** · committed | [continual-learning-bench](https://github.com/pgasawa/continual-learning-bench) (Apache-2.0) | `reef-eval stream cl-bench --agent <a>` |
+| [AgentCL](tasks/continual-learning/agentcl) | 2692 · **all 5 subsets, 15 streams** · fetched (non-commercial upstream) | [osunlp/AgentCL](https://huggingface.co/datasets/osunlp/AgentCL) (CC-BY-NC-4.0) | `reef-eval fetch agentcl`, then `reef-eval stream tasks/continual-learning/agentcl/mmlu-economics-* --agent <a>` |
 
 Of the benchmarks [AgentStream](https://arxiv.org/abs/2608.00155) builds
 its streams from, SWE-bench Verified is the hardest one with a published
