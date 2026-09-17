@@ -20,6 +20,7 @@ SKIP = (
     "tasks/autoresearch/edgebench/",
     "tasks/autoresearch/frontier-cs/frontier-cs-",
     "tasks/continual-learning/cl-bench/",
+    "tasks/continual-learning/agentcl/mmlu-",
     "tasks/continual-learning/terminal-bench/",
     "tasks/continual-learning/swebench-verified/",
     ".venv/",

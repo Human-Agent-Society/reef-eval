@@ -71,6 +71,7 @@ extend-exclude = [
     "tests/fixtures",
     "tasks/autoresearch/frontier-cs/*/**",
     "tasks/continual-learning/cl-bench/*/**",
+    "tasks/continual-learning/agentcl/mmlu-*/**",
     "tasks/continual-learning/swebench-verified/*/**",
     "tasks/continual-learning/terminal-bench/*/**",
     "tasks/autoresearch/edgebench/*/instruction.md",

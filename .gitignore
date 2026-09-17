@@ -13,6 +13,9 @@ site/
 # only cl-bench's download cache stays out.
 tasks/continual-learning/swebench-verified/*/
 tasks/continual-learning/cl-bench/.data/
+# AgentCL is CC-BY-NC-4.0, so its converted tasks and download cache stay out.
+tasks/continual-learning/agentcl/mmlu-*/
+tasks/continual-learning/agentcl/.data/
 # 2.6 GB of judge test data for the algorithmic track, fetched on demand.
 tasks/autoresearch/frontier-cs/.problems/
 tasks/autoresearch/frontier-cs/*/environment/.env
