@@ -297,11 +297,8 @@ def build_corpus_index(corpus_path: str, qrels: list[Path]) -> int:
 def fetch_browsecomp(args) -> int:
     """BrowseComp+: the originals, and the subqueries-then-originals stream."""
     convert = _module("convert_browsecomp")
-    if not args.corpus and not CORPUS_INDEX.exists():
-        raise SystemExit(
-            "BrowseComp+ needs its corpus, which AgentCL does not ship: pass "
-            "--corpus <jsonl|tsv of doc_id/title/text>. It is indexed once."
-        )
+    # The pinned files come down first, so `fetch.py browsecomp` verifies
+    # their digests even on a machine that has no corpus to convert with.
     for name in (
         "browsecomp_plus/ground_truth_original.jsonl",
         "browsecomp_plus/ground_truth_subqueries.jsonl",
@@ -309,6 +306,12 @@ def fetch_browsecomp(args) -> int:
         "browsecomp_plus/qrel_evidence.txt",
     ):
         source(name, args.revision)
+    if not args.corpus and not CORPUS_INDEX.exists():
+        raise SystemExit(
+            "the queries check out, but BrowseComp+ also needs its corpus, "
+            "which AgentCL does not ship: pass --corpus <jsonl|tsv of "
+            "doc_id/title/text>. It is indexed once."
+        )
     data_dir = CACHE / "browsecomp_plus"
     data_dir.mkdir(parents=True, exist_ok=True)
     for name in ("ground_truth_original.jsonl", "ground_truth_subqueries.jsonl"):
