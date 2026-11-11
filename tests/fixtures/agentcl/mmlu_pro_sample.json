@@ -1,0 +1,63 @@
+[
+ {
+  "question_id": 6826,
+  "question": "Which of the following would be classified under C when calculating GDP?",
+  "options": [
+   "The purchase of a new car by a car rental company",
+   "The purchase of a new construction crane by a construction company",
+   "A company buying a new office building",
+   "A homeowner mowing her own lawn",
+   "Flour purchased by a baker to make donuts",
+   "The purchase of new computer software by an accounting firm",
+   "$50.00 spent eating out at a restaurant",
+   "A barber cutting his own hair"
+  ],
+  "answer": "G",
+  "answer_index": 6,
+  "cot_content": "",
+  "category": "economics",
+  "src": "ori_mmlu-high_school_macroeconomics"
+ },
+ {
+  "question_id": 6827,
+  "question": "The aggregate demand curve is",
+  "options": [
+   "not found by adding product demand curves horizontally or vertically",
+   "a vertical summation of market demand curves",
+   "found by adding product demand curves both horizontally and vertically",
+   "a horizontal subtraction of firm demand curves",
+   "a simple aggregation of demand curves for individual goods",
+   "a vertical subtraction of market demand curves",
+   "a simple aggregation of supply curves for individual goods",
+   "a horizontal summation of firm demand curves",
+   "a horizontal summation of market demand curves",
+   "a vertical summation of firm demand curves"
+  ],
+  "answer": "A",
+  "answer_index": 0,
+  "cot_content": "",
+  "category": "economics",
+  "src": "ori_mmlu-high_school_macroeconomics"
+ },
+ {
+  "question_id": 11285,
+  "question": "What will be the number of lamps, each having 300 lumens, required to obtain an average illuminance of 50 lux on a 4m * 3m rectangular room?",
+  "options": [
+   "6",
+   "1",
+   "2",
+   "5",
+   "7",
+   "3",
+   "9",
+   "10",
+   "8",
+   "4"
+  ],
+  "answer": "C",
+  "answer_index": 2,
+  "cot_content": "",
+  "category": "engineering",
+  "src": "ori_mmlu-electrical_engineering"
+ }
+]

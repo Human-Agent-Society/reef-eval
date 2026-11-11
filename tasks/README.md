@@ -58,15 +58,16 @@ states the oracle baseline and what the task teaches.
 
 Benchmarks for `reef-eval stream`. terminal-bench and CL-Bench tasks are
 **committed** (Apache-2.0): browse and run them directly; each
-`fetch.py` regenerates them from its pinned sources. SWE-bench Verified's
-dataset repo carries no license, so those tasks are the exception:
-fetched onto your machine, never committed.
+`fetch.py` regenerates them from its pinned sources. SWE-bench Verified
+(no license upstream) and AgentCL (CC-BY-NC-4.0) are the exceptions:
+their tasks are fetched onto your machine, never committed.
 
 | Folder | Upstream | Get the tasks |
 |---|---|---|
 | [`terminal-bench/`](continual-learning/terminal-bench) | [terminal-bench 2.0](https://github.com/laude-institute/terminal-bench-2) (Apache-2.0) · 89 terminal tasks · **v2.0 only, 1.x unsupported** | **all 89 committed**; `reef-eval fetch terminal-bench` re-syncs from the pin |
 | [`swebench-verified/`](continual-learning/swebench-verified) | [SWE-bench Verified](https://github.com/SWE-bench/SWE-bench) via [harbor-datasets](https://github.com/laude-institute/harbor-datasets) (no license) · 500 issue-fixing tasks · the hardest [AgentStream](https://arxiv.org/abs/2608.00155) benchmark with a Harbor version | `reef-eval fetch swebench-verified --limit 50` |
 | [`cl-bench/`](continual-learning/cl-bench) | [CL-Bench](https://www.continual-learning-bench.com) (Apache-2.0) · continual learning over sequential instances of one environment · **all 6 domains converted, 301 tasks** (spectrum, sales, cohorts, PR bugfixes, metered SQL, poker) · upstream metrics, deterministic and offline; hidden state lives in judge sidecars | **all 301 committed**; `reef-eval fetch cl-bench` regenerates from the pins |
+| [`agentcl/`](continual-learning/agentcl) | [AgentCL](https://huggingface.co/datasets/osunlp/AgentCL) (CC-BY-NC-4.0) · continual learning over streams of questions, code, search and embodied episodes · **all 5 subsets converted, 2692 tasks in 15 streams** (MMLU-Pro, CodeEval-Pro, BrowseComp+, BabyAI, ScienceWorld) · each subset ships a plain ordering and one whose second half needs the first; hidden tests, corpora and simulators live in judge sidecars | `reef-eval fetch agentcl`; never committed (non-commercial), and BrowseComp+ needs `--corpus` |
 
 ## Adding a new benchmark
 
