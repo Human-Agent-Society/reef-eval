@@ -112,6 +112,44 @@ def test_unset_compose_variables_are_caught_before_the_run(tmp_path):
         assert _unset_compose_vars(tmp_path) == []
 
 
+def test_an_escaped_dollar_is_not_a_compose_variable(tmp_path):
+    """Compose reads "$$" as a literal "$": "$${CATALINA_HOME}" reaches the
+    container as text, while "$$${DATA_PATH}" still needs DATA_PATH."""
+    from reef_eval.executors import _unset_compose_vars
+
+    environment = tmp_path / "environment"
+    environment.mkdir()
+    (environment / "docker-compose.yaml").write_text(
+        "services:\n  main:\n"
+        '    command: ["sh", "-c", "sh $${CATALINA_HOME}/bin/catalina.sh run"]\n'
+        "    volumes:\n      - $$${DATA_PATH}/x:/x:ro\n"
+    )
+
+    with mock.patch.dict(os.environ, {}, clear=True):
+        assert _unset_compose_vars(tmp_path) == ["DATA_PATH"]
+
+
+def test_a_compose_default_is_not_a_missing_variable(tmp_path):
+    """Compose fills "${NAME:-x}", "${NAME-x}", "${NAME:+x}" and "${NAME+x}"
+    when NAME is unset. It fails on "${NAME:?err}" and "${NAME?err}"."""
+    from reef_eval.executors import _unset_compose_vars
+
+    environment = tmp_path / "environment"
+    environment.mkdir()
+    (environment / "docker-compose.yaml").write_text(
+        "services:\n  main:\n    environment:\n"
+        '      A: "${COLON_DEFAULT:-x}"\n'
+        '      B: "${DASH_DEFAULT-x}"\n'
+        '      C: "${COLON_ALT:+x}"\n'
+        '      D: "${PLUS_ALT+x}"\n'
+        '      E: "${COLON_REQUIRED:?needed}"\n'
+        '      F: "${PLAIN_REQUIRED?needed}"\n'
+    )
+
+    with mock.patch.dict(os.environ, {}, clear=True):
+        assert _unset_compose_vars(tmp_path) == ["COLON_REQUIRED", "PLAIN_REQUIRED"]
+
+
 def test_self_contained_tasks_need_nothing_set():
     from reef_eval.executors import _unset_compose_vars
 

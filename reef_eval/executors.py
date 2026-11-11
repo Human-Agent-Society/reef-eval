@@ -160,7 +160,13 @@ def _unset_compose_vars(task_dir: Path) -> list[str]:
     except ImportError:  # pragma: no cover - harbor is optional
         provided = set()
     provided |= set(os.environ) | _dotenv_names(compose.parent)
-    referenced = set(re.findall(r"\$\{([A-Z_][A-Z0-9_]*)[:}]", compose.read_text()))
+    # Compose reads "$$" as a literal "$". Match it first, so "$${NAME}" names
+    # no variable; the empty match it leaves is dropped. "${NAME}" and the
+    # required forms "${NAME?err}" and "${NAME:?err}" need NAME. The "-", ":-",
+    # "+" and ":+" forms give a value when NAME is unset.
+    referenced = set(
+        re.findall(r"\$\$|\$\{([A-Z_][A-Z0-9_]*)(?:\}|:?\?)", compose.read_text())
+    ) - {""}
     return sorted(referenced - provided)
 
 
